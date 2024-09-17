@@ -1,4 +1,5 @@
 const userRepository = require('./../repository/user-repository');
+const whatsapp = require('./../../../../utils/whatsapp')
 
 exports.getMoviesByTheaterController = async (req, res) => {
     try {
@@ -30,13 +31,32 @@ exports.getShowtimeController = async (req, res) => {
     }
 };
 
-exports.bookMovieController = async (req, res) => {
+
+const getUpperCaseLetters = () => {
+    const letters = [];
+    for (let i = 65; i <= 90; i++) { // 65 is 'A' and 90 is 'Z'
+    letters.push(String.fromCharCode(i));
+    }
+    return letters;
+};
+
+const uppercaseLetters = getUpperCaseLetters();
+
+exports.verifyOrderController = async (req, res) => {
     try {
         const { showtimeId, seatDetails } = req.body;
 
+        
+        let msg = 'Thanks for Booking with Us. \n your seats are'
         // Create new seat and add reference to showtime
-        const newSeat = await userRepository.createSeat(seatDetails);
-        await userRepository.addSeatToShowtime(showtimeId, newSeat._id);
+        for(let i=0; i<seatDetails.length;i++){
+            msg = msg + `\n ${uppercaseLetters[seatDetails[i] / 10]} ${seatDetails[i] % 10}}`
+            console.log(seatDetails)
+            console.log({number:seatDetails[i]})
+            const newSeat = await userRepository.createSeat({number:seatDetails[i]});
+            await userRepository.addSeatToShowtime(showtimeId, newSeat._id);
+        }
+        whatsapp.sendMsg('8943788919', msg)
 
         res.status(201).json({ message: 'Seat booked successfully!' });
     } catch (error) {

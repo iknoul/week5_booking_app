@@ -1,7 +1,12 @@
 // SeatArrangement.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ButtonMain from '../Buttons/ButtonMain';
+import payment from '@/app/Services/PaymentService'
+import {Alert} from 'antd'
+import { useRouter } from 'next/navigation';
 import styles from './seatArrangement.module.css' // Optional: For custom styling
+
+
 
 interface SeatArrangementProps {
     notAvailble?: number[];
@@ -12,7 +17,34 @@ interface SeatArrangementProps {
 
 const SeatArrangement: React.FC<SeatArrangementProps> = ({ rows, columns, notAvailble=[12, 23, 34, 46, 20, 10], seatsToBook=5 }) => {
 
+
+    const router = useRouter()
+
     const [selected, setSelected] = useState<number[]>([])
+    const [success, setSuccess] = useState(false)
+    const [fail, setFail] = useState(false)
+
+  const handleBook = async()=>{
+    
+    try {
+      const result = await payment({
+        amountToBePaid: 500, // amount in smallest currency unit (e.g., paise for INR)
+        seatDetails: selected, // selected seat details
+        showtimeId: '66e91189b4fe71b71b031832', // showtime ID from the system,
+        setSuccess,
+        setFail
+      });
+      // setSuccess(true)
+      // setTimeout(()=>{
+      //   setSuccess(false)
+      //   router.push('/')
+      // }, 5000)
+
+    } catch (error) {
+        setFail(true)
+        setTimeout(()=>{setFail(false)}, 2500)
+    }
+  }
 
     // Function to handle clicks
   const handleClick = (seatNumber: number) => {
@@ -65,9 +97,23 @@ const SeatArrangement: React.FC<SeatArrangementProps> = ({ rows, columns, notAva
         </div>
         );
     }
+    useEffect(()=>{
+      setTimeout(()=>{
+        if(success){
+          router.push('/')
+        }
+      }, 5000)
+    }, [success])
 
     return (
     <div className={styles.seatArrangement}>
+
+        {success &&
+            <Alert message="Booking Success" type="success" showIcon className={styles.alert}/>
+        }
+        {fail&&
+            <Alert message="Booking Failed" type="error" showIcon />
+        }
         {seatGrid}
         {seatGrid.length>0 &&
             <div className={styles.screen}>
@@ -75,7 +121,7 @@ const SeatArrangement: React.FC<SeatArrangementProps> = ({ rows, columns, notAva
             </div>
         }
         
-        <ButtonMain bg='red' disabled={!(selected.length == seatsToBook)}>Make Payement</ButtonMain>
+        <ButtonMain bg='red' callbackFunction={handleBook} disabled={!(selected.length == seatsToBook)}>Make Payement</ButtonMain>
         
     </div>);
 };

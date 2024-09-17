@@ -23,6 +23,7 @@ export default function RootLayout({
           <NavBar />
           {children}
         </AuthProvider>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       </body>
     </html>
   );
