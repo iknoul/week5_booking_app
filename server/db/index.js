@@ -8,5 +8,5 @@
       console.log('DATABASE CONNECTED');
     })
     .catch(e => {
-      console.log(e);
+      console.log('no connection',e);
     });

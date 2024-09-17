@@ -1,0 +1,24 @@
+.googleAuth, .faceBookAuth{
+    cursor: pointer;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 0;
+    text-align: center;
+    border: 1px solid black;
+}
+.googleAuth{
+    background-color: rgba(234, 67, 53);
+}
+.faceBookAuth{
+    background-color: rgb(1, 101, 225);
+}
+
+.googleAuth:hover{
+    background-color: rgba(234, 68, 53, 0.63);
+}
+.faceBookAuth:hover{
+    background-color: rgba(1, 102, 225, 0.596);
+}

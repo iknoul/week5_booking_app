@@ -1,95 +1,78 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+import AuthProvider from "./Context/AuthProviders";
+import FilmCards from "./components/FilmCard/FilmCards";
+import CorousalFilm from "./components/CarousalImage/CorousalFilm";
+import SearchBar from "./components/SearchBar/SearchBar";
+import SearchResultCards from "./components/FilmCard/SearchResultCards";
+import CustomPrompt from "./components/customPrompt";
+import Appq from "./components/auth";
+import FacebookAuth from "./components/FacebookAuth";
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+import { useAuth } from "./hooks/useAuth";
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+import styles from './page.module.css'
+import { use, useEffect, useState } from "react";
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+interface userinput{
+  title?: string;
 }
+const Home = () =>{
+
+  const [isPromptOpen, setIsPromptOpen] = useState(false);
+  const [userInput, setUserInput] = useState<userinput>({});
+  const { isAuthenticated, login, logout, user, isOtpDone } = useAuth()
+
+
+
+  const handleOpenPrompt = () => {
+    setIsPromptOpen(true);
+  };
+
+  // const handleConfirm = (input: string) => {
+  //   setUserInput(setUserInput);
+  //   setIsPromptOpen(false);
+  // };
+
+  const handleCancel = () => {
+    setIsPromptOpen(false);
+  };
+ 
+
+
+  return(
+  <>
+    <main className={styles.main}>
+   
+
+        {/* <NavBar isAuthenticated={isAuthenticated} isOtpDone={isOtpDone} login={login} logout={logout} user={user}/> */}
+        <SearchBar setUserInput={setUserInput}/>
+        <SearchResultCards {...userInput}/>
+        <CorousalFilm />
+        <FilmCards />   
+        {/* <CustomPrompt
+              message="Please enter something:"
+              onConfirm={handleConfirm}
+              onCancel={handleCancel}
+            />
+        <div className="App">
+        <h1>Custom Prompt Example</h1>
+        <button onClick={handleOpenPrompt}>Open Custom Prompt</button>
+        {userInput && <p>You entered: {userInput}</p>}
+        {isPromptOpen && (
+          <>
+            <CustomPrompt
+              message="Please enter something:"
+              onConfirm={handleConfirm}
+              onCancel={handleCancel}
+            />
+            <Appq />
+            <FacebookAuth />
+          </>
+        )}
+      </div> */}
+
+    </main>
+  </>)
+}
+
+export default Home

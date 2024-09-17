@@ -1,0 +1,21 @@
+.cardContainer{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-shrink: 0 !important;
+    width: 100%;
+    padding: 1%;
+    overflow-x: auto !important;
+    gap: 10px;
+}
+.category{
+
+    width: 100%;
+    text-align: left;
+    padding-left: 20px;
+}
+.results{
+    /* justify-content: center; */
+    background-color: brown;
+    width: 100px;
+    height: 100px;
+}

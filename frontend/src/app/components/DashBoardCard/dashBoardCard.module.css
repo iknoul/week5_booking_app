@@ -1,0 +1,23 @@
+
+.dashBoardCard{
+    cursor: pointer;
+    width: 90px;
+    height: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    border-radius: 5px;
+    background-color: rgb(255, 255, 255);
+}
+.dashBoardCard img{
+    width: 24px;
+    height: 24px;
+    /* background-color: blue; */
+}
+.dashBoardCard p{
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: black;
+}

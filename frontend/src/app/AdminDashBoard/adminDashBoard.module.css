@@ -1,0 +1,12 @@
+.adminDashBoard{
+    display: flex;
+    flex-direction: column;
+    height: 93vh;
+    position: relative;
+    align-items: center;
+}
+.alert, .Spin{
+    position: absolute;
+    margin-top: 15vh;
+    z-index: 101;
+}

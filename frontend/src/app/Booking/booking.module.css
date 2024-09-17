@@ -1,0 +1,111 @@
+/* .bookingPage{
+    margin-top: 70px;
+} */
+/* booking.module.css */
+.bookingPage {
+    margin-top: 70px;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  .book{
+    display: flex;
+    justify-content: space-evenly;
+    background-color: rgba(83, 81, 81, 0.683);
+    padding: 10px;
+    align-items: center;
+    width: 100%;
+  }
+  .imageContainer{
+    width: 25%;
+    height: 100%;
+    padding: 2px;
+  }
+  .imageContainer img{
+    width: 100%;
+    height: 100%;
+  }
+  .rightContainer{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    gap: 10px;
+  }
+ 
+  .rightContainer ul {
+    display: flex;
+    width: 100%;
+    text-align: left;
+    color: rgba(255, 255, 255, 0.671);
+    list-style-position: inside; /*Moves the bullets inside the list item */
+    padding: 0; /* Removes default padding */
+    margin: 0; /* Removes default margin */
+    margin-bottom: 20px;
+    
+  }
+  .rightContainer li:first-child {
+    list-style-type: none; /* Removes the bullet from the first <li> element */
+  }
+  .rightContainer li:not(:first-child) {
+
+    padding-left: 10px; 
+  }
+  .rightContainer  h1 {
+    margin-bottom: 10px;
+    
+  }
+  .rightContainer h3{
+    width: 100%;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+    color: rgba(255, 255, 255, 0.671)
+    
+  }
+  
+  .bookingPage select, .bookingPage input {
+    margin-bottom: 10px;
+    padding: 8px;
+    font-size: 16px;
+  }
+  .movieDetails{
+    width: 100%;
+    color: rgba(255, 255, 255, 0.765);
+  }
+  .movieDetails h3{
+    padding: 0 5px;
+    font-size: 26px;
+    font-weight: 700;
+  }
+  .movieDetails p, .cast{
+    padding: 30px 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(245, 245, 245, 0.662);
+    font-size: 16px;
+    font-weight:400 ;
+  }
+  .cast{
+    display: flex;
+  }
+  .cast p{
+    border-bottom: none;
+  }
+  .movieDetails span{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .movieDetails img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: white;
+  }
+  
+ 

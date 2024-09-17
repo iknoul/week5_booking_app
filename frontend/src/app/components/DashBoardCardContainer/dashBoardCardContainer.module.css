@@ -1,0 +1,9 @@
+.dashBoardCardContainer{
+    max-width: 500px;
+    margin-top: 70px;
+    padding-top: 70px;
+    gap: 30px;
+    display: flex;
+    flex-wrap: wrap;
+   
+}

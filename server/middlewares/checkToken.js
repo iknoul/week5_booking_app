@@ -5,9 +5,12 @@ exports.blacklistedTokens = new Set();
 exports.checkToken = (steps)=>{
 
     return (req, res, next)=>{
+
+
         try {
+            console.log(bToken, 'btoken >>>>...')
+
             const bToken = req.headers.authorization
-        
             if(!bToken){
                 res.status(403).json({success:false,message:'you are not authorized'})
             }

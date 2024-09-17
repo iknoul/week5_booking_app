@@ -1,0 +1,50 @@
+.buttonMain{
+    width: fit-content;
+    height: fit-content;
+    padding: 10px 10px;
+    background-color: rgba(165, 165, 31, 0.776);
+    cursor: pointer !important;
+}
+
+.buttonMain p{
+    font-size: 12px !important;
+    font-weight: 500;
+}
+
+.buttonMain:hover{
+    background-color: rgba(165, 165, 31, 0.55);
+}
+.white{
+    background-color: rgba(255, 255, 255, 0.906);
+    color: black;
+}
+.white:hover{
+    background-color: rgba(255, 255, 255, 0.523);
+    color: black;
+}
+.black{
+    background-color: black;
+    color: white;
+}
+.black:hover{
+    background-color: rgba(0, 0, 0, 0.628);
+}
+.red{
+    background-color: rgb(178, 4, 4);
+    color: white;
+}
+.red:hover{
+    background-color: rgba(178, 4, 4, 0.628);
+}
+.border{
+    background: none;
+    border: 1px solid white;
+    color: white;
+}
+.border:hover{
+    background-color: rgba(255, 255, 255, 0.628);
+}
+.disabled {
+    background-color: #aeaeaed8 !important;
+    cursor: not-allowed !important;
+}
