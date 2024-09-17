@@ -64,10 +64,12 @@ exports.addTheaterController = async (req, res) => {
 exports.addShowController = async (req, res) => {
     try {
         // Extract data from request
-        const { movieId, theaterId, time } = req.body;
+        console.log(req.body, "the body")
+        const showtimeData = req.body;
+        const {movieId, theaterId, time, date} = showtimeData
 
         // Validate input
-        if (!movieId || !theaterId || !time) {
+        if (!movieId || !theaterId || !time || !date) {
             return res.status(400).json({ message: 'Movie ID, Theater ID, and showtime are required.' });
         }
 
@@ -79,12 +81,14 @@ exports.addShowController = async (req, res) => {
             return res.status(404).json({ message: 'Movie or Theater not found.' });
         }
 
-        // Create showtime data
-        const showtimeData = {
-            movie: movieId,
-            theater: theaterId,
-            time: new Date(time),
-        };
+        // // Create showtime data
+        //  const newShowtime = new ShowTime({
+        //     movie,
+        //     theater,
+        //     date,  // Date in 'YYYY-MM-DD'
+        //     time,  // Time in 'HH:mm'
+        //     seatPrice
+        // });
 
         // Add the showtime
         const newShowtime = await adminRepository.addShowtime(showtimeData);
@@ -102,9 +106,10 @@ exports.addShowController = async (req, res) => {
         });
     } catch (error) {
         // Handle errors
+        console.log(error)
         res.status(500).json({
             status: 'error',
-            message: error.message
+            message: error.message,
         });
     }
 };

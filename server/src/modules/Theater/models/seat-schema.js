@@ -1,9 +1,12 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+const model = mongoose.model
 
-const SeatSchema = new mongoose.Schema({
-  number: { type: String, required: true },
-  userId: {type: String, required: true }
+const SeatSchema = new Schema({
+  number: { type: Number, required: true },
+  // userId: {type: String, required: true }
 });
 
-const Seat = mongoose('seats', SeatSchema);
-export default Seat;
+const Seat = model('seats', SeatSchema);
+
+module.exports = Seat

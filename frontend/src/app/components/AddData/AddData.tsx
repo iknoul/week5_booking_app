@@ -17,18 +17,31 @@ interface AddDataProps {
 }
 
 interface searchedTheater{
+	_id?:string;
 	name?:string;
 	location?: string;
+}
+interface searchedMovie{
+		_id?: string;
+        Title?: string;
+        Runtime?: string; // Assuming Runtime is a string, e.g., '120 min'
+        Genre?: string[]; // Array of genre strings
+        Language?: string;
+        Actors?: string[]; // Array of actor names
+        Poster?: string; // URL or path to the poster image
+        Plot?: string;
+        imdbRating?:  string;
 }
 
 const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callbackFunction=()=>{}, isSearchedMovie }) => {
 
 	const [theaterData, setTheaterData] = useState<{ name: string; location: string; seatPrice: string }>({ name: '', location: '', seatPrice:'' });
 	const [searchName, setSearchName] = useState<string>('')
-	const [searchedMovie, setSearchedMovie] = useState<object>({})
+	const [searchedMovie, setSearchedMovie] = useState<searchedMovie>({})
 	const [searchedTheater, setSearchedTheater] = useState<searchedTheater>({name:'sfasd', location:"nbvjv"});
 	const [theater, setTheater] = useState('');
-    const [time, setTime] = useState('');
+    const [date, setDate] = useState(''); // For date
+    const [time, setTime] = useState(''); // For time
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	
 	const [error, setError] = useState<string | null>(null);
@@ -133,7 +146,25 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
 			return; // Prevent further execution
 			}
 			break;
-		};
+		case "Show time":
+			if (theater && searchedMovie && time && date)
+			{
+			// Clear previous error if any
+			setError(null);
+			// Proceed with submission logic
+			callbackFunction({
+				theaterId: searchedTheater._id,
+				movieId: searchedMovie._id ? searchedMovie._id : undefined,
+				date, 
+				time }, item, purpose)
+			}
+			else
+			{
+			setError('*all data required');
+			return; // Prevent further execution
+			}
+			break;
+	};
 
 		}
 	
@@ -239,12 +270,10 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
 			</>
 
 			}
-			<input
-				type="date"
-				id="time"
-				value={time}
-				onChange={(e) => setTime(e.target.value)}
-			/>
+			<span className={styles.dateInput}>
+				<input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+				<input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+			</span>          
 
 			{error && <div className={styles.error}>{error}</div>}
 

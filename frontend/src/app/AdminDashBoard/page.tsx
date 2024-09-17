@@ -38,6 +38,12 @@ const AdminDashBoard:React.FC = ()=>{
                         await makeNewMovie(data)
                     }
                     break;
+                case "Show time":
+                    if(puprose == "add")
+                    {
+                        console.log(data)
+                        await makeNewShowTime(data)
+                    }
                 default:
                     setSelectedItem({ item: '', purpose: '' })
                     
@@ -87,6 +93,20 @@ const AdminDashBoard:React.FC = ()=>{
             setFail(true)
             setSelectedItem({item:'', purpose:''})
             setTimeout(()=>{setFail(false)}, 2500)
+        }
+        setLoading(false)
+    }
+
+    const makeNewShowTime = async(data:object) =>{
+        setLoading(true)
+        console.log(data, "here inside the make new")
+        try {
+            await axios.post('/admin/add-show-time', data);
+            setSuccess(true)
+            setSelectedItem({item:'', purpose:''})
+            setTimeout(()=>{setSuccess(false)}, 5000)
+        } catch (error) {
+            console.error('Error adding showtime:', error);
         }
         setLoading(false)
     }

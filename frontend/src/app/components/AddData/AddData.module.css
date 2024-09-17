@@ -46,6 +46,22 @@
     /* background-color: rgba(195, 188, 188, 0.662); */
     background: none;
 }
+
+.dateInput{
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.562);
+    gap: 15px;
+    margin: 10px 0;
+}
+/* .dateInput::before {
+    content: '\1F4C5';
+    font-size: 20px;
+    color: #ff6347;
+    transform: translateY(-50%);
+    pointer-events: none;
+} */
 .addData button{
     cursor: pointer;
     padding: 5px;

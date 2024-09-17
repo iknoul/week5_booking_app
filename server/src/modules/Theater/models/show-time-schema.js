@@ -4,10 +4,30 @@ const model = mongoose.model
 
 
 const ShowtimeSchema = new Schema({
-  movie: { type: Schema.Types.ObjectId, ref: 'Movie', required: true },
-  theater: { type: Schema.Types.ObjectId, ref: 'Theater', required: true },
-  time: { type: Date, required: true },
-  bookedSeats: [{ type: Schema.Types.ObjectId, ref: 'Seat' }], // References Seat model
+	movieId: { 
+		type: Schema.Types.ObjectId, 
+		ref: 'Movie', required: true 
+	},
+
+	theaterId: { 
+		type: Schema.Types.ObjectId, 
+		ref: 'Theater', required: true 
+	},
+
+	date: {
+		type: String,  // Storing the date as 'YYYY-MM-DD'
+		required: true
+	},
+
+	time: {
+		type: String,  // Storing the time as 'HH:mm'
+		required: true
+	},
+
+	bookedSeats: [
+		{ type: Schema.Types.ObjectId, 
+		ref: 'Seat' }
+	], // References Seat model
 });
 
 const Showtime = model('showtimes', ShowtimeSchema);
