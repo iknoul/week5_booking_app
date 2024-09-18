@@ -88,6 +88,42 @@
     text-align: left;
     color: rgba(0, 0, 0, 0.763);
 }
+.movieForm {
+    /* display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px; */
+    margin-bottom: 30px;
+}
+
+.movieForm label {
+    /* font-weight: bold;
+    margin-bottom: 5px;
+    display: block; */
+}
+
+.movieForm input,
+.movieForm textarea {
+    padding: 8px;
+    width: 100% ;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.movieForm .textarea {
+    resize: vertical;
+}
+
+.movieForm input:focus,
+.movieForm textarea:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+.movieForm textarea {
+    height: 100px;
+}
+
 .error{
     width: 100%;
     text-align: left;

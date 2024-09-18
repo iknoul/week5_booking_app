@@ -40,22 +40,28 @@ const getUpperCaseLetters = () => {
     return letters;
 };
 
-const uppercaseLetters = getUpperCaseLetters();
 
 exports.verifyOrderController = async (req, res) => {
+    
+    const uppercaseLetters = getUpperCaseLetters();
+    
     try {
-        const { showtimeId, seatDetails } = req.body;
+        const { showtimeId, seatDetails, showTimeData, theaterName, theaterLocation, movieName } = req.body;
 
         
-        let msg = 'Thanks for Booking with Us. \n your seats are'
+        let msg = (`Thanks for Booking with Us. 
+        \n${movieName}\nThaeater: ${theaterName}\nLocation: ${theaterLocation}\nDate: ${showTimeData.date}\nTime: ${showTimeData.time}
+        \nyour seats are:`)
         // Create new seat and add reference to showtime
         for(let i=0; i<seatDetails.length;i++){
-            msg = msg + `\n ${uppercaseLetters[seatDetails[i] / 10]} ${seatDetails[i] % 10}}`
+            console.log(seatDetails[i] / 10)
+            msg = msg + ` ${uppercaseLetters[Math.floor(seatDetails[i] / 10)]}${seatDetails[i] % 10}`
             console.log(seatDetails)
             console.log({number:seatDetails[i]})
             const newSeat = await userRepository.createSeat({number:seatDetails[i]});
-            await userRepository.addSeatToShowtime(showtimeId, newSeat._id);
+            await userRepository.addSeatToShowtime(showTimeData._id, newSeat._id);
         }
+        msg = msg+'\n\n book again ...'
         whatsapp.sendMsg('8943788919', msg)
 
         res.status(201).json({ message: 'Seat booked successfully!' });

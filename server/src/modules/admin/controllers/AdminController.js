@@ -4,7 +4,7 @@ const adminRepository = require('./../repository/admin-repository')
 exports.addMovieController = async (req, res) => {
     try {
         // Extract data from the request body
-        const { Title, Runtime, Genre, Language, Actors, Poster, Plot, imdbRating } = req.body.movie;
+        const { Title, Runtime, Genre, Language, Actors, Poster, Plot, imdbRating, Director, Writer } = req.body.movie;
 
         // Prepare movie data
         const movieData = {
@@ -15,7 +15,9 @@ exports.addMovieController = async (req, res) => {
             Actors,
             Poster,
             Plot,
-            imdbRating:Number(imdbRating)
+            imdbRating:Number(imdbRating),
+            Director,
+            Writer,
         };
 
         // Call the repository function to add the movie
@@ -80,15 +82,6 @@ exports.addShowController = async (req, res) => {
         if (!movie || !theater) {
             return res.status(404).json({ message: 'Movie or Theater not found.' });
         }
-
-        // // Create showtime data
-        //  const newShowtime = new ShowTime({
-        //     movie,
-        //     theater,
-        //     date,  // Date in 'YYYY-MM-DD'
-        //     time,  // Time in 'HH:mm'
-        //     seatPrice
-        // });
 
         // Add the showtime
         const newShowtime = await adminRepository.addShowtime(showtimeData);

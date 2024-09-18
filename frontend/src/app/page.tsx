@@ -15,6 +15,7 @@ import { use, useEffect, useState } from "react";
 
 interface userinput{
   title?: string;
+  theaterName?: string;
 }
 const Home = () =>{
 

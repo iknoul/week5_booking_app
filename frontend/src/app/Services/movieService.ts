@@ -3,13 +3,16 @@ import axios from "@/utils/axios";
 interface GetMoviesParams {
     genre?: string;
     rating?: number; // Assuming rating is a number for filtering
+    theater?: string;
     sortByRating?: boolean;
     limit?: number;
     title?: string;
+    id?:string;
 }
 
-export const getMoviesByFilter = async ({ title, genre, rating, sortByRating, limit}: GetMoviesParams) => {
+export const getMoviesByFilter = async ({ title, genre, rating, theater, sortByRating, limit}: GetMoviesParams) => {
     try {
+
         // Build the request payload
         const payload: any = {};
         if (genre) {
@@ -18,8 +21,11 @@ export const getMoviesByFilter = async ({ title, genre, rating, sortByRating, li
         if (rating !== undefined) {
             payload.rating = rating;
         }
+        if (theater !== undefined) {
+            payload.theaterName = theater;
+        }
         if (sortByRating !== undefined) {
-            payload.sortByRating = -1;
+            payload.sortByRating= true;
         }
         if(limit) {
             payload.limit = limit

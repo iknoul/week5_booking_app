@@ -42,7 +42,18 @@ const movieSchema = new Schema({
       required : true
 
     },
-    Theater: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Theater' }],
+    Writer: {
+      type:String,
+    },
+    Director: {
+      type: String,
+    },
+    Theater: [
+        { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Theater' 
+        }
+    ],
 
 
     

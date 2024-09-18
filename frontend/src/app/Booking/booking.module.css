@@ -107,5 +107,15 @@
     border-radius: 50%;
     background-color: white;
   }
+  .rating{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    color: white;
+    background-color: rgba(246, 70, 70, 0.676);
+    font-size: 16px;
+    font-weight: 500;
+  }
   
  

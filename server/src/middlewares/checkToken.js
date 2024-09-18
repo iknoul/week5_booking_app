@@ -1,8 +1,8 @@
-const jwt = require('./../../../services/jwt-servise');
+const jwt = require('./../services/jwt-servise');
 
 exports.blacklistedTokens = new Set();
 
-exports.checkToken = (steps, not)=>{
+exports.checkToken = (steps, not, requiredRole)=>{
 
     return (req, res, next)=>{
         
@@ -44,6 +44,11 @@ exports.checkToken = (steps, not)=>{
                 if (!not && currentStepNotAllowed) {
                     return res.status(403).json({ message: 'you are not authorized' });
                 }
+            }
+
+            // Check if the user role matches the required role
+            if (requiredRole && decoded.role !== requiredRole) {
+                return res.status(403).json({ message: 'you are not authorized' });
             }
             console.log(decoded)
             req.body.user = decoded;

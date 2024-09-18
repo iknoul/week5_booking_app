@@ -11,16 +11,16 @@ type PrivateRouterProps = {
 };
 
 const PrivateRoute: React.FC<PrivateRouterProps> = ({roleP, children }) => {
-  const { isAuthenticated, isOtpDone, role} = useAuth();
+  const { isAuthenticated, role} = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     console.log(role, 'in private rpute')
-    if ((!isAuthenticated && !isOtpDone) || (roleP && roleP !=role)) 
+    if ((!isAuthenticated) || (roleP && roleP !=role)) 
     {
       router.push('/'); // Redirect to login if not authenticated
     }
-  }, [isAuthenticated, isOtpDone]);
+  }, [isAuthenticated]);
 
   if (!isAuthenticated) {
     return null; // Optionally, you can show a loading spinner here

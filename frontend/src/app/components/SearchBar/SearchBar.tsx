@@ -18,7 +18,8 @@ const SearchBar: React.FC<SetSearchParams> = ({ setUserInput }) => {
         console.log('workinh,', movieName)
         setMovieName(e.target.value)
     };
-    const handleTheaterNameChange = (e: React.ChangeEvent<HTMLInputElement>) => setTheaterName(e.target.value);
+    const handleTheaterNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTheaterName(e.target.value)};
     const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => setDate(e.target.value);
     const handleShowChange = (e: React.ChangeEvent<HTMLInputElement>) => setShow(e.target.value);
 
@@ -34,7 +35,7 @@ const SearchBar: React.FC<SetSearchParams> = ({ setUserInput }) => {
             // Create userInput object only with valid inputs
             const userInput: Record<string, string> = {};
             if (isMovieNameValid) userInput.title = movieName;
-            if (isTheaterNameValid) userInput.theater = theaterName;
+            if (isTheaterNameValid) {userInput.theater = theaterName};
             if (isDateValid) userInput.date = date;
             if (isShowValid) userInput.show = show;
     

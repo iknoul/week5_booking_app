@@ -7,6 +7,8 @@ const router = express.Router();
 const TheaterController = require('./../controllers/TheaterController')
 
 router.get('/getTheater',  TheaterController.getTheater);
+router.post('/show-time', TheaterController.getShowtimes)
+router.get('/seats', TheaterController.getSeatDetails)
 
 
 module.exports = router;

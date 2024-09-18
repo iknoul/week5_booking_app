@@ -1,4 +1,6 @@
 import axios from "@/utils/axios";
+import { useAuth } from "../hooks/useAuth";
+
 
 interface RazorpayResponse {
     razorpay_order_id: string;
@@ -14,9 +16,16 @@ interface payment {
     showtimeId: string;
     setSuccess: Function;
     setFail: Function;
+    showTimeData: object;
+    theaterName:string;
+    theaterLocation: string;
+    movieName?: string;
 }
 
-const handlePayment = async ({amountToBePaid, seatDetails, showtimeId, setSuccess, setFail}:payment) => {
+const handlePayment = async ({amountToBePaid, seatDetails, showtimeId, setSuccess, setFail, showTimeData, theaterName, theaterLocation, movieName}:payment) => {
+
+  const { token } = useAuth() 
+  
     try {
       // Request the server to create an order
       const { data } = await axios.post('user/create-order', { amount: amountToBePaid }); // Amount in smallest currency unit (e.g., 500 paise = 5 INR)
@@ -27,8 +36,8 @@ const handlePayment = async ({amountToBePaid, seatDetails, showtimeId, setSucces
         key: 'rzp_test_OZZv3kK0jph7j5', // Your Razorpay Key ID
         amount: amount,
         currency: 'INR',
-        name: 'Your App Name',
-        description: 'Order Description',
+        name: 'Book your ticket',
+        description: 'dont refersh this page, it will automaitcally redirect .. ',
         order_id: orderId,
         handler: async (response: RazorpayResponse) => {
           // Verify the payment on the server
@@ -37,7 +46,16 @@ const handlePayment = async ({amountToBePaid, seatDetails, showtimeId, setSucces
             paymentId: response.razorpay_payment_id,
             signature: response.razorpay_signature,
             seatDetails,
-            showtimeId
+            showtimeId,
+            showTimeData,
+            theaterName,
+            theaterLocation,
+            movieName
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Token from props
+            },
           });
           // Payment verified successfully
           // alert('Payment Successful');

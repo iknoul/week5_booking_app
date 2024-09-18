@@ -62,11 +62,11 @@ const DashBoardCardContainer:React.FC<DashBoardCardContainerProps> = ({selectedI
             callBackFunction={() => handleVisibilityChange('Show time', 'add')} 
         />
         <DashBoardCard 
-            text='Movie to theater'
-            purpose='edit'
-            callBackFunction={() => handleVisibilityChange('Movie', 'edit')} 
+            text='Movie manually'
+            purpose='add'
+            callBackFunction={() => handleVisibilityChange('Movie manually', 'add')} 
         />
-         <DashBoardCard 
+         {/* <DashBoardCard 
             text='Show'
             purpose='add'
         />
@@ -81,7 +81,7 @@ const DashBoardCardContainer:React.FC<DashBoardCardContainerProps> = ({selectedI
         <DashBoardCard 
             text='Theater'
             purpose='edit'
-        />
+        /> */}
         {/* <DashBoardCard 
             text='Film'
             purpose='add'

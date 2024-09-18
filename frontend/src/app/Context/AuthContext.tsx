@@ -16,16 +16,16 @@ interface User {
 interface AuthContextType 
 {
   isAuthenticated: boolean;
-  isOtpDone: boolean;
+  oAuthStatus: boolean;
   role: string;
   login: Function;
   logout: Function;
-  otpVerified: Function;
+  setOAuthStatus: Function;
   setRole: Function;
   user?: User | undefined;
   setUserData: Function;
-  setIsAuthenticated: Function
-  setUser: Function
+  token?: string;
+  setToken: Function;
 }
 
 // Create the AuthContext

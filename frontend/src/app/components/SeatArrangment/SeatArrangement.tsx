@@ -1,5 +1,6 @@
 // SeatArrangement.tsx
 import React, { useEffect, useState } from 'react';
+import {fetchSeatNumbers } from './../../Services/theaterService'; // Assuming getShowtimesByTheaterAndDate exists
 import ButtonMain from '../Buttons/ButtonMain';
 import payment from '@/app/Services/PaymentService'
 import {Alert} from 'antd'
@@ -9,18 +10,25 @@ import styles from './seatArrangement.module.css' // Optional: For custom stylin
 
 
 interface SeatArrangementProps {
-    notAvailble?: number[];
+    bookedSeats?: string[];
     rows: number;
     columns: number;
     seatsToBook?: number;
+    amountTobePaid?: number;
+    showtimeId?:string;
+    showTimeData?: object;
+    theaterName?:string;
+    theaterLocation?: string;
+    movieName?: string;
 }
 
-const SeatArrangement: React.FC<SeatArrangementProps> = ({ rows, columns, notAvailble=[12, 23, 34, 46, 20, 10], seatsToBook=5 }) => {
+const SeatArrangement: React.FC<SeatArrangementProps> = ({ rows, columns, seatsToBook=1, amountTobePaid=0, bookedSeats= [], showtimeId='', showTimeData={}, theaterName='', theaterLocation='', movieName=''}) => {
 
 
     const router = useRouter()
 
     const [selected, setSelected] = useState<number[]>([])
+    const [notAvailble, setNotAvailable] = useState<number[]>([])
     const [success, setSuccess] = useState(false)
     const [fail, setFail] = useState(false)
 
@@ -28,11 +36,15 @@ const SeatArrangement: React.FC<SeatArrangementProps> = ({ rows, columns, notAva
     
     try {
       const result = await payment({
-        amountToBePaid: 500, // amount in smallest currency unit (e.g., paise for INR)
+        amountToBePaid: amountTobePaid, // amount in smallest currency unit (e.g., paise for INR)
         seatDetails: selected, // selected seat details
-        showtimeId: '66e91189b4fe71b71b031832', // showtime ID from the system,
+        showtimeId, // showtime ID from the system,
         setSuccess,
-        setFail
+        setFail,
+        showTimeData,
+        theaterName,
+        theaterLocation,
+        movieName
       });
       // setSuccess(true)
       // setTimeout(()=>{
@@ -48,19 +60,21 @@ const SeatArrangement: React.FC<SeatArrangementProps> = ({ rows, columns, notAva
 
     // Function to handle clicks
   const handleClick = (seatNumber: number) => {
-    setSelected((prevSelected) => {
-      // Check if the item is already selected
-      if (prevSelected.includes(seatNumber)) {
-        // Remove item from the array
-        return prevSelected.filter(item => item !== seatNumber);
-      } else if(seatsToBook>selected.length){
-        // Add item to the array
-        return [...prevSelected, seatNumber];
-      }
-      else{
-        return [...prevSelected]
-      }
-    });
+    if(!notAvailble.includes(seatNumber)){
+      setSelected((prevSelected) => {
+        // Check if the item is already selected
+        if (prevSelected.includes(seatNumber)) {
+          // Remove item from the array
+          return prevSelected.filter(item => item !== seatNumber);
+        } else if(seatsToBook>selected.length){
+          // Add item to the array
+          return [...prevSelected, seatNumber];
+        }
+        else{
+          return [...prevSelected]
+        }
+      });
+    }
   };
 
     const getUpperCaseLetters = (): string[] => {
@@ -97,6 +111,24 @@ const SeatArrangement: React.FC<SeatArrangementProps> = ({ rows, columns, notAva
         </div>
         );
     }
+
+    useEffect(()=>{
+      const FetchSeatNumbers = async (bookedSeats: string[]) => {
+        if(bookedSeats.length>0){
+          try {
+            console.log(bookedSeats, 'boo kss ')
+            const seatNumbers = await fetchSeatNumbers(bookedSeats);
+            console.log('Seat Numbers:', seatNumbers);
+            // Process and use the seat numbers as needed
+            setNotAvailable(seatNumbers)
+          } catch (error) {
+            console.error(error)
+          }
+        }
+      }; 
+      FetchSeatNumbers(bookedSeats);
+    }, [bookedSeats])
+
     useEffect(()=>{
       setTimeout(()=>{
         if(success){

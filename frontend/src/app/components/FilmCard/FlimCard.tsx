@@ -13,7 +13,7 @@ interface FilmCardProps {
         Runtime?: string; // Assuming Runtime is a string, e.g., '120 min'
         Genre?: string[]; // Array of genre strings
         Language?: string;
-        Actors?: string[]; // Array of actor names
+        Actors?: string; // Array of actor names
         Poster?: string; // URL or path to the poster image
         Plot?: string;
         imdbRating?:  string;

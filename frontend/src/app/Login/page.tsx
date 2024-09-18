@@ -20,63 +20,82 @@ const LoginPage:React.FC = ()=>{
 
 
     const router = useRouter()
-    const [oAuthStatus, setOAuthStatus] = useState(false)
     const searchParams = useSearchParams();
     const temptoken = searchParams?.get('token') ?? '';  // Retrieve the token from query params
 
-    const {isAuthenticated, login, isOtpDone, otpVerified, setUserData, user, setUser, setRole} = useAuth()
-    const [token, setToken] = useState('')
+    const {isAuthenticated, login, oAuthStatus, setOAuthStatus, setUserData, setRole, setToken, token} = useAuth()
+
 
 
 
     const verifyToken = (token:string)=>{
         const payload = decodeToken(token)
         if (payload) {
-			try {
+            try {
 				sessionStorage.setItem('token', token)
+				console.log(token, 'token from tempy token')
+				console.log(payload, 'payload of token')
+				setToken(token); 
 				setUserData(payload.user);
-				setUser(payload.user)
 				setRole(payload.role)
-				otpVerified()
-
-			} catch (error) {
-				console.error(error)
-			}            
+				setOAuthStatus(true)
+            } catch (error) {
+              	console.error(error)
+            }            
         } 
 
     }
-    const otpVerifyHandler = async()=>{
-		try {
-			const result = await axios.post(
-				`/auth/verify-otp`, // The endpoint
-				{}, // Request body (if you need to pass data, include it here)
-				{
-				headers: {
-					Authorization: `Bearer ${token}`,
-				}
-				}
-			);
-			
-			verifyToken(result.data.registrationToken)
-			
-		} catch (error) {
-       }
-        // console.log(response.data, response.data? response.data.user:'')
+   // Handler to send OTP
+  const sendOtpHandler = async (mobile_number:string) => {
+	console.log(token, "token from useAuth")
+    try {
+      	const result = await axios.post(`/auth/send-otp`, 
+		{ mobile_number },
+		{
+			headers: {
+				Authorization: `Bearer ${token}`, // Token from props
+			},
+		});
+      console.log('OTP sent successfully:', result.data);
+    } catch (error) {
+      console.error('Error sending OTP:', error);
     }
+  };
+
+  // Handler to verify OTP
+  const otpVerifyHandler = async (mobile_number:string, otp: string) => {
+    try {
+      const result = await axios.post(
+        `/auth/verify-otp`, // The endpoint
+        { mobile_number, OTP:otp }, // Request body (otp passed here)
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Token from props
+          },
+        }
+      );
+      console.log('OTP verified successfully:', result.data);
+      verifyToken(result.data.registrationToken); // Call verifyToken with the registrationToken
+	  login()
+    } catch (error) {
+      console.error('Error verifying OTP:', error);
+    }
+  };
 
     useEffect(() => {
         if (temptoken) {
-          setToken(temptoken); // Set the token in the state
+			verifyToken(temptoken) 
+		  // Set the token in the state
           console.log(token)
-          login();           // Call your login function if temptoken exists
+	        // Call your login function if temptoken exists
         }
     }, [temptoken]); // Only re-run this effect when temptoken changes
 
     useEffect (()=>{
-        if(isOtpDone){
+        if(isAuthenticated){
           router.push('/')
         }
-    }, [isOtpDone])
+    }, [isAuthenticated])
 
     useEffect(()=>{
       const tokenFromStorage = sessionStorage.getItem('token')
@@ -98,14 +117,14 @@ const LoginPage:React.FC = ()=>{
 
         <div className={styles.logInContainer}>
 
-            {!isAuthenticated &&
+            {!oAuthStatus &&
             
               <AuthComponent />
             }
 
             {
-              isAuthenticated && !isOtpDone &&
-              <InputText otpVerifyHandler={otpVerifyHandler}/>
+              oAuthStatus && !isAuthenticated &&
+              <InputText sendOtpHandler={sendOtpHandler} otpVerifyHandler={otpVerifyHandler}/>
             }
 
         </div>

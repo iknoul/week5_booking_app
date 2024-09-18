@@ -1,6 +1,6 @@
 import FilmCard from './FlimCard'
 
-import {getMoviesByFilter} from './../../Services/movieService'
+import { getMoviesByFilter } from './../../Services/movieService'
 
 import styles from './FilmCards.module.css'
 import { useEffect, useState } from 'react'
@@ -70,7 +70,7 @@ const FilmCards = () =>{
             <div className={styles.cardContainer}>    
                 { 
                 actions.map((item, index)=>{
-                    return(<FilmCard key={index} item={item}/>)
+                    return(<FilmCard key={index} item={item} callBackFunction={()=>{handleOnClick(item)}}/>)
                 })
                 }          
             </div>
@@ -84,7 +84,7 @@ const FilmCards = () =>{
             <div className={styles.cardContainer}>    
                 { 
                 romances.map((item, index)=>{
-                    return(<FilmCard key={index} item={item}/>)
+                    return(<FilmCard key={index} item={item} callBackFunction={()=>{handleOnClick(item)}}/>)
                 })
                 }          
             </div>

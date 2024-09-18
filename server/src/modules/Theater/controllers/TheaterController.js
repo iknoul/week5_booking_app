@@ -1,29 +1,42 @@
-const Theater = require('../models/theater-schema')
+const mongoose = require('mongoose');
+const Theater = require('../models/theater-schema');
+const Showtime = require('./../models/show-time-schema'); // Assuming the model file name
+const Seat = require('./../models/seat-schema'); // Import your Seat model
+
 
 exports.getTheater = (req, res) => {
-    const { name, location } = req.query;
+    const { name, location, id } = req.query;
+    console.log(id)
 
     // Build aggregation pipeline
     const pipeline = [];
 
-    // If genre is provided, match movies with that genre
+    // If name is provided, match theaters with that name
     if (name) {
         pipeline.push({
             $match: {
-                name: { $regex: name } // Check if the movie's genre is in the requested genres array
+                name: { $regex: name, $options: 'i' } // Case-insensitive name search
             }
         });
     }
 
-    // If title is provided, add it to the match stage
+    // If location is provided, match theaters with that location
     if (location) {
         pipeline.push({
             $match: {
-                location: { $regex: location, $options: 'i' } // Case-insensitive title search
+                location: { $regex: location, $options: 'i' } // Case-insensitive location search
             }
         });
     }
 
+    // If id is provided, match the exact ObjectId
+    if (id) {
+        pipeline.push({
+            $match: {
+                _id: new mongoose.Types.ObjectId(id) // Match the exact ObjectId
+            }
+        });
+    }
 
     // Execute the aggregation pipeline
     Theater.aggregate(pipeline)
@@ -40,3 +53,66 @@ exports.getTheater = (req, res) => {
             });
         });
 };
+
+
+
+exports.getShowtimes = async (req, res) => {
+    const { theaterId, movieId, date } = req.query;
+
+    try {
+        // Convert date to string if it's provided
+        const formattedDate = date ? new Date(date).toISOString().split('T')[0] : undefined;
+
+        // Create a query object
+        const query = {};
+
+        // Add filters to query object if they exist
+        if (theaterId) query.theaterId = new mongoose.Types.ObjectId(theaterId);
+        if (movieId) query.movieId = new mongoose.Types.ObjectId(movieId);
+        if (formattedDate) query.date = formattedDate;
+
+        // Fetch showtimes based on the provided theaterId, movieId, and formatted date
+        const showtimes = await Showtime.find(query).exec();
+
+        res.status(200).json({
+            status: 'success',
+            data: showtimes
+        });
+    } catch (err) {
+        res.status(500).json({
+            status: 'error',
+            message: err.message
+        });
+    }
+};
+
+exports.getSeatDetails = async (req, res) =>{
+  
+    const { seatIds } = req.query;
+
+    if (!seatIds || !Array.isArray(seatIds)) {
+        return res.status(400).json({ status: 'error', message: 'Invalid seat IDs' });
+    }
+
+    try {
+        // Fetch only seat numbers
+        const seats = await Seat.find(
+            { _id: { $in: seatIds } },
+            { number: 1, _id: 0 } // Project only the `number` field, exclude `_id`
+        ).exec();
+
+        // Map to extract seat numbers
+        const seatNumbers = seats.map(seat => seat.number);
+
+        res.status(200).json({
+            status: 'success',
+            data: seatNumbers
+        });
+    } catch (err) {
+        res.status(500).json({
+            status: 'error',
+            message: err.message
+        });
+    }
+};
+

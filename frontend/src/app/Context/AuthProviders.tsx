@@ -2,6 +2,7 @@
 
 import React, { ReactNode, useState } from 'react';
 import { AuthContext } from './AuthContext';
+import axios from './../../utils/axios'
 
 // Define the User interface
 interface Profile{
@@ -17,19 +18,32 @@ interface User {
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isOtpDone, setIsOtpDone] = useState(false);
-  const [role, setRole] = useState('admin');
+  const [oAuthStatus, setOAuthStatus] = useState(false);
+  const [role, setRole] = useState('');
   const [user, setUser] = useState<User | undefined>(undefined);
+  const [token, setToken] = useState<string>('')
+
+
+  // Handler to Log out
+  const handleLogOut = async () => {
+    console.log(token, "token from useAuth")
+      try {
+          const result = await axios.post(`/auth/logout`,{});
+        console.log('Log out successfully:', result.data);
+      } catch (error) {
+        console.error('Error sending OTP:', error);
+      }
+    };
 
   const login = () => setIsAuthenticated(true);
 
   const logout = () => {
-    setIsOtpDone(false);
+    handleLogOut()
     setIsAuthenticated(false);
-    // setUser(undefined); // Optional: clear user on logout
+    setOAuthStatus(false)
+    setUser(undefined); // Optional: clear user on logout
+    sessionStorage.clear()
   };
-
-  const otpVerified = () => setIsOtpDone(true);
 
   const setUserData = (user: User) => {
     console.log(user,'in setUserdata  ')
@@ -41,7 +55,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, isOtpDone, role, user, login, logout, otpVerified, setRole, setUserData, setUser, setIsAuthenticated }}
+      value={{ isAuthenticated, oAuthStatus, role, user, token, login, logout, setOAuthStatus, setRole, setUserData, setToken }}
     >
       {children}
     </AuthContext.Provider>

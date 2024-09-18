@@ -23,7 +23,7 @@ exports.sentOtp = async (req, res, next) =>
       const otp = otpService.generateOTP(mobile_number);
       console.log(otp, "thid is otp",mobile_number)
       // await whatsapp.sendMsg(mobile_number, `Your OTP Code: \nYour OTP code is ${otp}`);
-      // await twilio.sendSms(mobile_number, otp)
+      await twilio.sendSms(mobile_number, otp)
       return res.status(200).send('OTP sent successfully');
   } 
   catch (error) 
@@ -39,29 +39,20 @@ exports.verifyOTP = async(req, res, next) => {
   if (otpService.verifyOTP(mobile_number, OTP)) {
 
       const admin = await Admin.findOne({email: user.email})
-      let registrationToken = null
+      let loginToken = null
 
       if(admin)
       {
-        registrationToken = jwt.createToken({ user, stage:'otpVerified', role:'admin'})
+        loginToken = jwt.createToken({ user, mobile_number, stage:'otpVerified', role:'admin'})
       }
       else
       {
-        registrationToken = jwt.createToken({ user, stage:'otpVerified', role:'user'})
+        loginToken = jwt.createToken({ user, mobile_number, stage:'otpVerified', role:'user'})
       } 
      
-      // const updatedUser = await User.findOneAndUpdate(
-      //     { email: email }, // Find the user by email
-      //     {
-      //       $set: {
-      //         ...(mobile_number && { mobile_number }), // Update mobile number if provided
-      //       },
-      //     },
-      //   ); 
-
       return res
           .status(200)
-          .json({success:true, message:'mobile verification succesfull',registrationToken})      
+          .json({success:true, message:'mobile verification succesfull',loginToken})      
           
   } else {
       return res.status(401).send('Invalid or expired OTP');

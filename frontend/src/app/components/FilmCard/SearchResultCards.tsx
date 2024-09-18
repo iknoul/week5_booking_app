@@ -4,9 +4,11 @@ import FilmCard from './FlimCard';
 import { getMoviesByFilter } from './../../Services/movieService'; // Adjust import according to your project structure
 
 import styles from './FilmCards.module.css'
+import { useAuth } from '@/app/hooks/useAuth';
+import { useRouter } from 'next/navigation';
 interface SearchCardsProps {
     title?: string;
-    // theaterName?: string;
+    theaterName?: string;
     // date?: string;
     // show?: string;
 }
@@ -15,9 +17,23 @@ interface SearchCardsProps {
 const SearchResultCards: React.FC<SearchCardsProps> = (props) => {
     const [results, setResults] = useState<object[]>([]);
 
+    const {isAuthenticated} = useAuth()
+    const router = useRouter();
+
+    const handleOnClick = (item: object) => {
+        if (!isAuthenticated) {
+            router.push('/Login');
+        } else {
+            // Use encodeURIComponent for the stringified movie object
+            const movieData = encodeURIComponent(JSON.stringify(item));
+            router.push(`/Booking?movie=${movieData}`);
+        }
+    }
+
     // Function to fetch images based on the search parameters
     const getImages = async () => {
         try {
+            console.log(props, 'hdgefe egfw ei7')
             const response = await getMoviesByFilter(props);
             setResults(response);
             console.log(response, 'sdhfv hvv')
@@ -43,7 +59,7 @@ const SearchResultCards: React.FC<SearchCardsProps> = (props) => {
         <div className={styles.cardContainer}>    
             { 
             results.map((item, index)=>{
-                return(<FilmCard key={index} item={item}/>)
+                return(<FilmCard key={index} item={item} callBackFunction={()=>{handleOnClick(item)}}/>)
             })
             }          
         </div>

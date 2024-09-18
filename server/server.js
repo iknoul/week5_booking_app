@@ -18,6 +18,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(passport.initialize());
 
+const checkToken = require('./src/middlewares/checkToken')
+const validateMiddleWare = require('./src/middlewares/validateMiddleware')
+
 
 // Import routes
 const authRoutes = require('./src/modules/auth/routes')
@@ -29,8 +32,8 @@ const theaterRoute = require('./src/modules/Theater/routes')
 // Use routes
 app.use('/auth', authRoutes);
 app.use('/movie', movieRoute)
-app.use('/admin', adminRoute)
-app.use('/user', userRoute)
+app.use('/admin', checkToken.checkToken(role='admin'), adminRoute)
+app.use('/user', checkToken.checkToken(), userRoute)
 app.use('/theater', theaterRoute)
 
 

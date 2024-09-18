@@ -20,7 +20,7 @@ passport.use(new GoogleStrategy({
     email: profile.emails ? profile.emails[0].value : 'No Email',
   };
   console.log(user)
-  const token = jwtService.createToken(user);
+  const token = jwtService.createToken({user, step:['oAuthDone']});
   done(null, { user, token });
 }));
 

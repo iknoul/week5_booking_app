@@ -27,10 +27,12 @@ interface searchedMovie{
         Runtime?: string; // Assuming Runtime is a string, e.g., '120 min'
         Genre?: string[]; // Array of genre strings
         Language?: string;
-        Actors?: string[]; // Array of actor names
+        Actors?: string; // Array of actor names
         Poster?: string; // URL or path to the poster image
         Plot?: string;
         imdbRating?:  string;
+		Writer?: string;
+		Director?:string;
 }
 
 const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callbackFunction=()=>{}, isSearchedMovie }) => {
@@ -38,7 +40,7 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
 	const [theaterData, setTheaterData] = useState<{ name: string; location: string; seatPrice: string }>({ name: '', location: '', seatPrice:'' });
 	const [searchName, setSearchName] = useState<string>('')
 	const [searchedMovie, setSearchedMovie] = useState<searchedMovie>({})
-	const [searchedTheater, setSearchedTheater] = useState<searchedTheater>({name:'sfasd', location:"nbvjv"});
+	const [searchedTheater, setSearchedTheater] = useState<searchedTheater>({name:'', location:""});
 	const [theater, setTheater] = useState('');
     const [date, setDate] = useState(''); // For date
     const [time, setTime] = useState(''); // For time
@@ -61,7 +63,6 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
 
 		setIsLoading(true)
 		try {
-		console.log('heree true')
 		let result;
 		if(isNew){
 			const response = await axiosO.get(`http://www.omdbapi.com/?t=${searchName}&apikey=f19a5e9c`)
@@ -77,9 +78,7 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
 		if(result?.Response == "True" || (!isNew&&result))
 		{    
 			setSearchedMovie(result)
-			console.log(result
-
-			)
+			console.log(result)
 		}
 		else
 		{
@@ -146,6 +145,22 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
 			return; // Prevent further execution
 			}
 			break;
+
+		case "Movie manually":
+			if (!isEmpty(searchedMovie))
+			{
+			// Clear previous error if any
+			setError(null);
+			// Proceed with submission logic
+			callbackFunction(searchedMovie, item, purpose)
+			}
+			else
+			{
+			setError('*movie required');
+			return; // Prevent further execution
+			}
+			break;
+
 		case "Show time":
 			if (theater && searchedMovie && time && date)
 			{
@@ -232,6 +247,164 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
 				}
 			</>
 			}
+
+			{(item==='Movie manually') &&
+			<>
+				<div className={styles.movieForm}>
+                    {/* Title Input */}
+                    <label htmlFor="title"></label>
+                    <input
+                        type="text"
+                        id="title"
+						placeholder='Title'
+                        value={searchedMovie.Title || ""}
+                        onChange={(e) =>
+                            setSearchedMovie({
+                                ...searchedMovie,
+                                Title: e.target.value,
+                            })
+                        }
+                    />
+
+                    {/* Runtime Input */}
+                    <label htmlFor="runtime"></label>
+                    <input
+                        type="text"
+                        id="runtime"
+						placeholder='Runtime'
+                        value={searchedMovie.Runtime || ""}
+                        onChange={(e) =>
+                            setSearchedMovie({
+                                ...searchedMovie,
+                                Runtime: e.target.value,
+                            })
+                        }
+                    />
+
+                    {/* Genre Input */}
+                    <label htmlFor="genre"></label>
+                    <input
+                        type="text"
+                        id="genre"
+						placeholder='Genre'
+                        value={searchedMovie.Genre?.join(", ") || ""}
+                        onChange={(e) =>
+                            setSearchedMovie({
+                                ...searchedMovie,
+                                Genre: e.target.value.split(","),
+                            })
+                        }
+                    />
+
+                    {/* Language Input */}
+                    <label htmlFor="language"></label>
+                    <input
+                        type="text"
+                        id="language"
+						placeholder='Language'
+                        value={searchedMovie.Language || ""}
+                        onChange={(e) =>
+                            setSearchedMovie({
+                                ...searchedMovie,
+                                Language: e.target.value,
+                            })
+                        }
+                    />
+
+                    {/* Actors Input */}
+                    <label htmlFor="actors"></label>
+                    <input
+                        type="text"
+                        id="actors"
+						placeholder='Actors name'
+                        value={searchedMovie.Actors || ""}
+                        onChange={(e) =>
+                            setSearchedMovie({
+                                ...searchedMovie,
+                                Actors: e.target.value,
+                            })
+                        }
+                    />
+
+                    {/* Poster Input */}
+                    <label htmlFor="poster"></label>
+                    <input
+                        type="text"
+                        id="poster"
+						placeholder='Poster URL'
+                        value={searchedMovie.Poster || ""}
+                        onChange={(e) =>
+                            setSearchedMovie({
+                                ...searchedMovie,
+                                Poster: e.target.value,
+                            })
+                        }
+                    />
+
+                    {/* Plot Input */}
+                    <label htmlFor="plot"></label>
+                    <textarea
+                        id="plot"
+						placeholder='Plot'
+                        value={searchedMovie.Plot || ""}
+                        onChange={(e) =>
+                            setSearchedMovie({
+                                ...searchedMovie,
+                                Plot: e.target.value,
+                            })
+                        }
+                    />
+
+                    {/* IMDB Rating Input */}
+                    <label htmlFor="imdbRating"></label>
+                    <input
+                        type="text"
+                        id="imdbRating"
+						placeholder='IMDB Rating'
+                        value={searchedMovie.imdbRating || ""}
+                        onChange={(e) =>
+                            setSearchedMovie({
+                                ...searchedMovie,
+                                imdbRating: e.target.value,
+                            })
+                        }
+                    />
+
+                    {/* Writer Input */}
+                    <label htmlFor="writer"></label>
+                    <input
+                        type="text"
+                        id="writer"
+						placeholder='Writer name'
+                        value={searchedMovie.Writer || ""}
+                        onChange={(e) =>
+                            setSearchedMovie({
+                                ...searchedMovie,
+                                Writer: e.target.value,
+                            })
+                        }
+                    />
+
+                    {/* Director Input */}
+                    <label htmlFor="director"></label>
+                    <input
+                        type="text"
+                        id="director"
+						placeholder='Director name'
+                        value={searchedMovie.Director || ""}
+                        onChange={(e) =>
+                            setSearchedMovie({
+                                ...searchedMovie,
+                                Director: e.target.value,
+                            })
+                        }
+                    />
+                </div>
+
+				
+			</>
+			}
+
 			{(item ==='Show time') &&
 			<>
 				<div className={styles.movieSearch}>
@@ -267,13 +440,15 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
 				) : (
 					<Empty />
 				)}
+
+				<span className={styles.dateInput}>
+					<input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+					<input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+				</span> 
 			</>
 
 			}
-			<span className={styles.dateInput}>
-				<input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-				<input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
-			</span>          
+			         
 
 			{error && <div className={styles.error}>{error}</div>}
 

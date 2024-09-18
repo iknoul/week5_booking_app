@@ -32,7 +32,15 @@ const AdminDashBoard:React.FC = ()=>{
                         await makeNewTheater(data)
                     }
                     break;
-                case "Movie":
+                case "Movie" || "Movie manually":
+                    alert('now here')
+                    if(puprose == 'add')
+                    {
+                        await makeNewMovie(data)
+                    }
+                    break;
+                case 'Movie manually':
+                    alert('now here')
                     if(puprose == 'add')
                     {
                         await makeNewMovie(data)
