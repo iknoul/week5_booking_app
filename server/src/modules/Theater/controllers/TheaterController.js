@@ -67,24 +67,12 @@ exports.getShowtimes = async (req, res) => {
 
         // Create a query object
         const query = {};
-         // Add filters to query object if they exist
-         if (theaterId) query.theaterId = new mongoose.Types.ObjectId(theaterId);
-         if (movieId) query.movieId = new mongoose.Types.ObjectId(movieId);
-         if (formattedDate) query.date = String(formattedDate);
-         console.log( query.date, "date converted to string")
-
-
-        // Handle date range
-        // if (date) {
-        //     const startOfDay = new Date(date);
-        //     startOfDay.setUTCHours(0, 0, 0, 0); // Start of the day
-        //     const endOfDay = new Date(date);
-        //     endOfDay.setUTCHours(23, 59, 59, 999); // End of the day
-
-        //     query.date = String({ $gte: startOfDay, $lte: endOfDay });
-        //     console.log(date, "date converted to string")
-        // }
-
+        // Add filters to query object if they exist
+        if (theaterId) query.theaterId = new mongoose.Types.ObjectId(theaterId);
+        if (movieId) query.movieId = new mongoose.Types.ObjectId(movieId);
+        if (formattedDate) query.date = String(formattedDate);
+        
+        console.log( query.date, "date converted to string")
         console.log('', query)
 
         // Fetch showtimes based on the provided theaterId, movieId, and formatted date

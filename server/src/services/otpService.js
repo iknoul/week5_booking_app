@@ -10,19 +10,17 @@ exports.generateOTP = (mobile) => {
 
 exports.verifyOTP = (mobile, otp) => {
     
-    // console.log(otp)
-    // if (!otps[mobile]) {
-    //     return false;
-    // }
-    // if (otps[mobile].expires < Date.now()) {
-    //     console.log("now here")
-    //     delete otps[email];
-    //     return false;
-    // }
-    // if (otps[mobile].otp == otp) {
-    //     delete otps[mobile];
-    //     return true;
-    // }
-    // return false;
-    return true
+    console.log(otp)
+    if (!otps[mobile]) {
+        return false;
+    }
+    if (otps[mobile].expires < Date.now()) {
+        delete otps[email];
+        return false;
+    }
+    if (otps[mobile].otp == otp) {
+        delete otps[mobile];
+        return true;
+    }
+    return false;
 };

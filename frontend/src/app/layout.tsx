@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import NavBar from "./components/NavBar/NavBar";
+
 import AuthProvider from "./Context/AuthProviders";
+
+import NavBar from "./components/NavBar/NavBar";
+
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -18,13 +21,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <AuthProvider>
-          <NavBar />
-          {children}
-        </AuthProvider>
-        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-      </body>
+		<body className={inter.className}>
+
+			<AuthProvider>
+				<NavBar />
+				{children}
+			</AuthProvider>
+			<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+			
+		</body>
     </html>
   );
 }

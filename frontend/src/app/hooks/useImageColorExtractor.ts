@@ -9,27 +9,27 @@ import { extractColors } from 'extract-colors';  // Make sure to adjust the impo
  */
 const useImageColorExtractor = (imageUrl: string) => {
     
-  const [colors, setColors] = useState<string[]>([]);
+    const [colors, setColors] = useState<string[]>([]);
 
-  useEffect(() => {
-    const fetchColors = async () => {
-      try {
-        // Call the extractColors function with the image URL
-        // console.log(imageUrl)
-        const extractedColors = await extractColors(imageUrl);
-        // Map and store the hex colors
+    useEffect(() => {
+        const fetchColors = async () => {
+            try {
+                // Call the extractColors function with the image URL
+                // console.log(imageUrl)
+                const extractedColors = await extractColors(imageUrl);
+                // Map and store the hex colors
 
-        console.log(extractColors)
-        setColors(extractedColors.map(color => color.hex));
-      } catch (error) {
-        console.error('Error extracting colors:', error);
-      }
-    };
+                console.log(extractColors)
+                setColors(extractedColors.map(color => color.hex));
+            } catch (error) {
+                console.error('Error extracting colors:', error);
+            }
+        };
 
-    fetchColors();
-  }, [imageUrl]);
+        fetchColors();
+    }, [imageUrl]);
 
-  return { colors };
+    return { colors };
 };
 
 export default useImageColorExtractor;

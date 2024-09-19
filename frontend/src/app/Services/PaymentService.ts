@@ -21,10 +21,11 @@ interface payment {
     theaterName:string;
     theaterLocation: string;
     movieName?: string;
+	userName?: string;
     token?: string;
 }
 
-const handlePayment = async ({amountToBePaid, seatDetails, showtimeId, setSuccess, setFail, showTimeData, theaterName, theaterLocation, movieName, token}:payment) => {
+const handlePayment = async ({amountToBePaid, seatDetails, showtimeId, setSuccess, setFail, showTimeData, theaterName, theaterLocation, movieName, userName, token}:payment) => {
 
   // console.log('here inside payment but')
 
@@ -33,17 +34,17 @@ const handlePayment = async ({amountToBePaid, seatDetails, showtimeId, setSucces
   
     try {
       // Request the server to create an order
-      const { data } = await axios.post('user/create-order', 
-        { amount: amountToBePaid },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Token from props
-          },
-        }
-      ); // Amount in smallest currency unit (e.g., 500 paise = 5 INR)
+		const { data } = await axios.post('user/create-order', 
+			{ amount: amountToBePaid },
+			{
+			headers: {
+				Authorization: `Bearer ${token}`, // Token from props
+			},
+			}
+		); // Amount in smallest currency unit (e.g., 500 paise = 5 INR)
   
-      const { orderId, amount } = data.data;
-      const options = {
+    const { orderId, amount } = data.data;
+    const options = {
         key: PAYMENT_SERVICE_KEY, // Your Razorpay Key ID
         amount: amount,
         currency: 'INR',
@@ -51,32 +52,32 @@ const handlePayment = async ({amountToBePaid, seatDetails, showtimeId, setSucces
         description: 'dont refersh this page, it will automaitcally redirect .. ',
         order_id: orderId,
         handler: async (response: RazorpayResponse) => {
-          // Verify the payment on the server
-          await axios.post('user/verify-payment', {
-            orderId: response.razorpay_order_id,
-            paymentId: response.razorpay_payment_id,
-            signature: response.razorpay_signature,
-            seatDetails,
-            showtimeId,
-            showTimeData,
-            theaterName,
-            theaterLocation,
-            movieName
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Token from props
-            },
-          });
-          // Payment verified successfully
-          // alert('Payment Successful');
-          setSuccess(true)
-          setTimeout(()=>{setSuccess(false)}, 5000)
+			// Verify the payment on the server
+			await axios.post('user/verify-payment', {
+				orderId: response.razorpay_order_id,
+				paymentId: response.razorpay_payment_id,
+				signature: response.razorpay_signature,
+				seatDetails,
+				showtimeId,
+				showTimeData,
+				theaterName,
+				theaterLocation,
+				movieName
+			},
+			{
+				headers: {
+				Authorization: `Bearer ${token}`, // Token from props
+				},
+			});
+			// Payment verified successfully
+			// alert('Payment Successful');
+			setSuccess(true)
+			setTimeout(()=>{setSuccess(false)}, 5000)
         },
         prefill: {
-          name: 'Customer Name',
-          email: 'customer@example.com',
-          contact: '1234567890',
+			name: userName,
+			email: 'customer@example.com',
+			contact: '1234567890',
         },
       };
   

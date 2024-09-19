@@ -1,18 +1,15 @@
 'use client'
-
-
-import { useRouter, useParams, useSearchParams } from 'next/navigation'
-
-import AuthComponent from '../components/AuthComponent/AuthComponent';
-import InputText from '../components/InputText/InputText';
-
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { decodeToken } from '@/utils/decodeToken';
 import { useAuth } from "@/app/hooks/useAuth";
 import axios from './../../utils/axios'
 
+import AuthComponent from '../components/AuthComponent/AuthComponent';
+import OtpInput from '../components/OtpInput/OtpInput';
+
 import styles from './login.module.css'
-import { useEffect, useState } from "react";
 
 
 const LoginPage:React.FC = ()=>{
@@ -38,7 +35,7 @@ const LoginPage:React.FC = ()=>{
 				console.log(payload, 'payload of token')
 				setToken(token); 
 				const user:any= (payload.user);
-        setUserData(user.user)
+        setUserData(user)
 				setRole(payload.role)
 				setOAuthStatus(true)
             } catch (error) {
@@ -67,48 +64,48 @@ const LoginPage:React.FC = ()=>{
   };
 
   // Handler to verify OTP
-  const otpVerifyHandler = async (mobile_number:string, otp: string) => {
-    try {
-      const result = await axios.post(
-        `/auth/verify-otp`, // The endpoint
-        { mobile_number, OTP:otp }, // Request body (otp passed here)
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Token from props
-          },
-        }
-      );
-      setOtpSendStatus(3)
-      console.log('OTP verified successfully:', result.data);
-      verifyToken(result.data.loginToken); // Call verifyToken with the registrationToken
-	    login()
-    } catch (error) {
+	const otpVerifyHandler = async (mobile_number:string, otp: string) => {
+		try {
+			const result = await axios.post(
+				`/auth/verify-otp`, // The endpoint
+				{ mobile_number, OTP:otp }, // Request body (otp passed here)
+				{
+					headers: {
+						Authorization: `Bearer ${token}`, // Token from props
+					},
+				}
+			);
+			setOtpSendStatus(3)
+			console.log('OTP verified successfully:', result.data);
+			verifyToken(result.data.loginToken); // Call verifyToken with the registrationToken
+			login()
+		} catch (error) {
 
-      setOtpSendStatus(4)
-      console.error('Error verifying OTP:', error);
-    }
-  };
+			setOtpSendStatus(4)
+			console.error('Error verifying OTP:', error);
+		}
+	};
 
     useEffect(() => {
         if (temptoken) {
 			verifyToken(temptoken) 
-		  // Set the token in the state
-          console.log(token)
+		  	// Set the token in the state
+          	console.log(token)
 	        // Call your login function if temptoken exists
         }
     }, [temptoken]); // Only re-run this effect when temptoken changes
 
     useEffect (()=>{
         if(isAuthenticated){
-          router.push('/')
+          	router.push('/')
         }
     }, [isAuthenticated])
 
     useEffect(()=>{
-      const tokenFromStorage = sessionStorage.getItem('token')
-      if(tokenFromStorage){
-        verifyToken(tokenFromStorage)
-      }
+		const tokenFromStorage = sessionStorage.getItem('token')
+		if(tokenFromStorage){
+				verifyToken(tokenFromStorage)
+		}
     },[])
 
 
@@ -125,15 +122,13 @@ const LoginPage:React.FC = ()=>{
         <div className={styles.logInContainer}>
 
             {!oAuthStatus &&
-            
-              <AuthComponent />
+              	<AuthComponent />
             }
 
             {
-              oAuthStatus && !isAuthenticated &&
-              <InputText sendOtpHandler={sendOtpHandler} otpVerifyHandler={otpVerifyHandler} otpSendStatus={otpSendStatus}/>
+             	 oAuthStatus && !isAuthenticated &&
+              	<OtpInput sendOtpHandler={sendOtpHandler} otpVerifyHandler={otpVerifyHandler} otpSendStatus={otpSendStatus}/>
             }
-
         </div>
 
     </div>

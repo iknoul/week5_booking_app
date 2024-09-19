@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from 'react';
 
-import axiosO from 'axios';
-import axios from '@/utils/axios';
+import axiosO from 'axios'; // default axios
+import axios from '@/utils/axios'; // customized axios
 
 import FilmCard from '../FilmCard/FlimCard';
 import ButtonMain from '../Buttons/ButtonMain';
@@ -12,9 +12,7 @@ import styles from './AddData.module.css';
 interface AddDataProps {
 	item: string;
 	purpose: string;
-	visible?: boolean;
 	callbackFunction?: (theater?: object, item?: string, purpose?: string) => {};
-	isSearchedMovie?: boolean; 
 }
 
 interface searchedTheater{
@@ -23,20 +21,20 @@ interface searchedTheater{
 	location?: string;
 }
 interface searchedMovie{
-		_id?: string;
-        Title?: string;
-        Runtime?: string; // Assuming Runtime is a string, e.g., '120 min'
-        Genre?: string[]; // Array of genre strings
-        Language?: string;
-        Actors?: string; // Array of actor names
-        Poster?: string; // URL or path to the poster image
-        Plot?: string;
-        imdbRating?:  string;
-		Writer?: string;
-		Director?:string;
+	_id?: string;
+	Title?: string;
+	Runtime?: string; // Assuming Runtime is a string, e.g., '120 min'
+	Genre?: string[]; // Array of genre strings
+	Language?: string;
+	Actors?: string; // Array of actor names
+	Poster?: string; // URL or path to the poster image
+	Plot?: string;
+	imdbRating?:  string;
+	Writer?: string;
+	Director?:string;
 }
 
-const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callbackFunction=()=>{}, isSearchedMovie }) => {
+const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{}}) => {
 
 	const [theaterData, setTheaterData] = useState<{ name: string; location: string; seatPrice: string }>({ name: '', location: '', seatPrice:'' });
 	const [searchName, setSearchName] = useState<string>('')
@@ -63,39 +61,37 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
 	const searchNewMovie = async(isNew?: boolean)=>{
 
 		setIsLoading(true)
-		try {
-		let result;
-		if(isNew){
-			const response = await axiosO.get(`http://www.omdbapi.com/?t=${searchName}&apikey=f19a5e9c`)
-			result = response.data
-		}
-		else{
-			const response = await axios.post(`/movie/getMovie`,{title:searchName})
-			result = response.data.data[0]
-			console.log(response, result, "here olddd")
-		}
-		// console.log(result?.Response, 'sf')
-		
-		if(result?.Response == "True" || (!isNew&&result))
-		{    
-			setSearchedMovie(result)
-			console.log(result)
-		}
-		else
-		{
-			setSearchedMovie({})
-			console.log('no such film kn')
-		}
 
-		
+		try {
+			let result;
+			if(isNew) {
+				const response = await axiosO.get(`http://www.omdbapi.com/?t=${searchName}&apikey=f19a5e9c`)
+				result = response.data
+			} else {
+				const response = await axios.post(`/movie/getMovie`,{title:searchName})
+				result = response.data.data[0]
+				console.log(response, result, "here olddd")
+			}
+			// console.log(result?.Response, 'sf')
+			
+			if(result?.Response == "True" || (!isNew&&result)){    
+				setSearchedMovie(result)
+				console.log(result)
+			} else {
+				setSearchedMovie({})
+				console.log('no such film kn')
+			}
 		} catch (error) {
 			console.log('error baby')
 		}
+
 		setIsLoading(false)
 	}
 
 	const searchNewTheater = async () => {
+
 		setIsLoading(true)
+
         try {
             const response = await axios.get(`/theater/getTheater`, { params: { name: theater } });
             setSearchedTheater({...response.data.data[0]});
@@ -103,14 +99,15 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
         } catch (error) {
             console.error('Error fetching theater:', error);
         }
+
 		setIsLoading(false)
     };
 
 
 	// Define the onChange handler
 	const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-			const { id, value } = e.target;
-			setTheaterData(prevData => ({
+		const { id, value } = e.target;
+		setTheaterData(prevData => ({
 			...prevData,
 			[id]: value
 		}));
@@ -119,71 +116,61 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
 	// Handle submit action
 	const onSubmit = () => {
 		// Check if required fields are not empty
-		switch(item)
-		{
-		case "Theater":
-			if (theaterData.name.trim() === '' || theaterData.location.trim() === '') {
-			setError('*all fields are required.');
-			return; // Prevent further execution
-			}
-			// Clear previous error if any
-			setError(null);
-			// Proceed with submission logic
-			callbackFunction(theaterData, item, purpose);
-			break;
+		switch(item) {
 
-		case "Movie":
-			if (searchName && !isEmpty(searchedMovie))
-			{
-			// Clear previous error if any
-			setError(null);
-			// Proceed with submission logic
-			callbackFunction(searchedMovie, item, purpose)
-			}
-			else
-			{
-			setError('*movie required');
-			return; // Prevent further execution
-			}
-			break;
+			case "Theater":
+				if (theaterData.name.trim() === '' || theaterData.location.trim() === '') {
+					setError('*all fields are required.');
+					return; // Prevent further execution
+				}
+				// Clear previous error if any
+				setError(null);
+				// Proceed with submission logic
+				callbackFunction(theaterData, item, purpose);
+				break;
 
-		case "Movie manually":
-			if (!isEmpty(searchedMovie))
-			{
-			// Clear previous error if any
-			setError(null);
-			// Proceed with submission logic
-			callbackFunction(searchedMovie, item, purpose)
-			}
-			else
-			{
-			setError('*movie required');
-			return; // Prevent further execution
-			}
-			break;
+			case "Movie":
+				if (searchName && !isEmpty(searchedMovie)) {
+					// Clear previous error if any
+					setError(null);
+					// Proceed with submission logic
+					callbackFunction(searchedMovie, item, purpose)
+				} else {
+					setError('*movie required');
+					return; // Prevent further execution
+				}
 
-		case "Show time":
-			if (theater && searchedMovie && time && date)
-			{
-			// Clear previous error if any
-			setError(null);
-			// Proceed with submission logic
-			callbackFunction({
-				theaterId: searchedTheater._id,
-				movieId: searchedMovie._id ? searchedMovie._id : undefined,
-				date, 
-				time }, item, purpose)
-			}
-			else
-			{
-			setError('*all data required');
-			return; // Prevent further execution
-			}
-			break;
-	};
+				break;
 
-		}
-	
+			case "Movie manually":
+				if (!isEmpty(searchedMovie)) {
+					// Clear previous error if any
+					setError(null);
+					// Proceed with submission logic
+					callbackFunction(searchedMovie, item, purpose)
+				} else {
+					setError('*movie required');
+					return; // Prevent further execution
+				}
+				break;
+
+			case "Show time":
+				if (theater && searchedMovie && time && date) {
+					// Clear previous error if any
+					setError(null);
+					// Proceed with submission logic
+					callbackFunction({
+						theaterId: searchedTheater._id,
+						movieId: searchedMovie._id ? searchedMovie._id : undefined,
+						date, 
+						time }, item, purpose)
+				} else {
+					setError('*all data required');
+					return; // Prevent further execution
+				}
+				break;
+		};
+	}
 
 	// Handle cancel action
 	const onCancel = () => {
@@ -403,9 +390,7 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
                             })
                         }
                     />
-                </div>
-
-				
+                </div>				
 			</>
 			}
 
@@ -456,7 +441,6 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
 					<input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
 				</span> 
 			</>
-
 			}
 			         
 

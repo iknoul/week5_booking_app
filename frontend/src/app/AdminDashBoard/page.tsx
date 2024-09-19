@@ -1,17 +1,17 @@
 'use client'
 import axios from './../../utils/axios'
+
+import { useState } from 'react'
+import { useAuth } from '../hooks/useAuth';
+import { Alert, Spin } from 'antd';
+
 import DashBoardCardContainer from '../components/DashBoardCardContainer/DashBoardCardContainer'
 import AddData from '../components/AddData/AddData'
-import { Alert, Spin } from 'antd';
 
 import PrivateRoute from '../components/PrivateRouter'
 
-
-
 import styles from './adminDashBoard.module.css'
-import { useState } from 'react'
-import Item from 'antd/es/list/Item'
-import { useAuth } from '../hooks/useAuth';
+
 
 const AdminDashBoard:React.FC = ()=>{
 
@@ -24,8 +24,8 @@ const AdminDashBoard:React.FC = ()=>{
 
     const callbackFunction = async(data?:object, item?:string, puprose?: string)=>{
         setLoading(true)
-        if(data)
-        {
+        if(data){
+
             switch(item){
                 case "Theater":
                     if(puprose == 'add')
@@ -54,21 +54,22 @@ const AdminDashBoard:React.FC = ()=>{
                         console.log(data)
                         await makeNewShowTime(data)
                     }
+                    break;
                 default:
                     setSelectedItem({ item: '', purpose: '' })
-                    
+                    break;          
             }
         }
-        else
-        {
+        else{
             setSelectedItem({ item: '', purpose: '' })
         }
         setLoading(false)
-
     }
+
     const makeNewTheater = async(theater:object)=>{
+
         setLoading(true)
-        console.log('here')
+
         const response = await axios.post('/admin/add-theater',
             {theater},
             {
@@ -78,7 +79,6 @@ const AdminDashBoard:React.FC = ()=>{
             }
         )
         await new Promise((resolve) => setTimeout(resolve, 5000));
-        console.log(response)
 
         if(response?.status === 201){
             setSuccess(true)
@@ -90,13 +90,14 @@ const AdminDashBoard:React.FC = ()=>{
             setSelectedItem({item:'', purpose:''})
             setTimeout(()=>{setFail(false)}, 2500)
         }
-        setLoading(false)
 
+        setLoading(false)
     }
 
     const makeNewMovie = async(movie:object) =>{
+
         setLoading(true)
-        console.log('here')
+        
         const response = await axios.post('/admin/add-movie',
             {movie},
             {
@@ -105,24 +106,24 @@ const AdminDashBoard:React.FC = ()=>{
                 },
             })
         await new Promise((resolve) => setTimeout(resolve, 5000));
-        console.log(response)
 
         if(response?.status === 201){
             setSuccess(true)
             setSelectedItem({item:'', purpose:''})
             setTimeout(()=>{setSuccess(false)}, 5000)
-        }
-        else{
+        } else {
             setFail(true)
             setSelectedItem({item:'', purpose:''})
             setTimeout(()=>{setFail(false)}, 2500)
         }
+
         setLoading(false)
     }
 
     const makeNewShowTime = async(data:object) =>{
+
         setLoading(true)
-        console.log(data, "here inside the make new")
+     
         try {
             await axios.post('/admin/add-show-time', 
                 {data},
@@ -131,6 +132,7 @@ const AdminDashBoard:React.FC = ()=>{
                       Authorization: `Bearer ${token}`, // Token from props
                     },
                 });
+
             setSuccess(true)
             setSelectedItem({item:'', purpose:''})
             setTimeout(()=>{setSuccess(false)}, 5000)
@@ -139,9 +141,6 @@ const AdminDashBoard:React.FC = ()=>{
         }
         setLoading(false)
     }
-
-    
-
 
     return(
         <PrivateRoute roleP='admin'>

@@ -6,12 +6,11 @@ import Image from 'next/image'
 
 import styles from './authComponent.module.css'
 
-
 const AuthComponent = ()=>{
 
     const onloginhandler = () => {
         window.location.href = 'http://localhost:8888/auth/google-auth'; // Redirect to your Node.js backend
-      };
+    };
 
     return(
     <>

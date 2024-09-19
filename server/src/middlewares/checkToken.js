@@ -1,8 +1,9 @@
+const { headers } = require('next/headers');
 const jwt = require('./../services/jwt-servise');
 
 exports.blacklistedTokens = new Set();
 
-exports.checkToken = (steps, not, requiredRole)=>{
+exports.checkToken = (steps, not, requiredRole, needMobile)=>{
 
     return (req, res, next)=>{
         
@@ -10,16 +11,18 @@ exports.checkToken = (steps, not, requiredRole)=>{
         try {
 
             const bToken = req.headers.authorization
-            console.log
+           
             console.log(bToken)
+            
         
             if(!bToken){
                 res.status(403).json({success:false,message:'you are not authorized no btoken'})
             }
             const token = bToken.slice(7)
-
+            console.log('not headers')
             
             const decoded = jwt.verifyToken(token)
+            console.log(' headers')
 
             // Add email from decoded token to req.body
 
@@ -41,7 +44,7 @@ exports.checkToken = (steps, not, requiredRole)=>{
                 // Check if the current step is NOT in the required steps
                 const currentStepNotAllowed = decodedSteps.every(step => steps.indexOf(step) === -1);
                 console.log(currentStepNotAllowed, 'current')
-                if (not && currentStepNotAllowed) {
+                if (not && !currentStepNotAllowed) {
                     return res.status(403).json({ message: 'you are not authorized here' });
                 }
             }
@@ -50,7 +53,13 @@ exports.checkToken = (steps, not, requiredRole)=>{
             if (requiredRole && decoded.role !== requiredRole) {
                 return res.status(403).json({ message: 'you are not authorized' });
             }
-            console.log(decoded)
+
+            if(needMobile){
+                req.body.mobile_number = decoded.mobile_number;
+                console.log(decoded.mobile_number, "decoded . mobile number")
+            }
+            console.log(decoded, 'DECODEDE DATA')
+            console.log(needMobile, 'need  mobile')
             req.body.user = decoded.user;
 
             // req.body.user = {email:'21352050@pondiuni.ac.in'}

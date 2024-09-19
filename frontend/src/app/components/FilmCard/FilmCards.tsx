@@ -1,15 +1,15 @@
-import FilmCard from './FlimCard'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 import { getMoviesByFilter } from './../../Services/movieService'
 
-import styles from './FilmCards.module.css'
-import { useEffect, useState } from 'react'
-import { useAuth } from '@/app/hooks/useAuth'
-import { useRouter } from 'next/navigation'
+import FilmCard from './FlimCard'
+
+import styles from './styles/FilmCards.module.css'
+
 
 const FilmCards = () =>{
 
-    const {isAuthenticated} = useAuth()
     const router = useRouter();
     
     const [dramas, setDramas] = useState<object[]>([])
@@ -17,13 +17,10 @@ const FilmCards = () =>{
     const [romances, setRomances] = useState<object[]>([])
 
     const handleOnClick = (item: object) => {
-        if (!isAuthenticated) {
-            router.push('/Login');
-        } else {
-            // Use encodeURIComponent for the stringified movie object
-            const movieData = encodeURIComponent(JSON.stringify(item));
-            router.push(`/Booking?movie=${movieData}`);
-        }
+
+        // Use encodeURIComponent for the stringified movie object
+        const movieData = encodeURIComponent(JSON.stringify(item));
+        router.push(`/Booking?movie=${movieData}`);
     }
   
     useEffect(()=>{

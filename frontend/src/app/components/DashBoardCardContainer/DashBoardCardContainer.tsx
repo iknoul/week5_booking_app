@@ -1,11 +1,6 @@
-import Image from 'next/image'
-
 import DashBoardCard from '../DashBoardCard/DashBoardCard'
 
-
 import styles from './dashBoardCardContainer.module.css'
-
-
 
 interface SelectedItem {
     item: string;

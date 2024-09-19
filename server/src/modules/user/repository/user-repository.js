@@ -1,5 +1,3 @@
-const Theater = require('../../Theater/models/theater-schema');
-const Movie = require('../../movie/models/movie-schema');
 const Showtime = require('../../Theater/models/show-time-schema');
 const Seat = require('../../Theater/models/seat-schema');
 

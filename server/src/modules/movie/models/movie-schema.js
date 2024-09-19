@@ -5,59 +5,48 @@ const model = mongoose.model
 
 const movieSchema = new Schema({
     Title: {
-      type: String,
-      required : true
+      	type: String,
+      	required : true
     },
     Runtime:{
-      type:String,
-      required : true
+      	type:String,
+      	required : true
     },
     Poster:{
-      type: String,
-      required : true
-
+		type: String,
+		required : true
     },
     Actors:{
-      type: String,
-      required : true
-
+		type: String,
+		required : true
     },
     Genre:{
-      type:[String], 
-      required : true
-
+		type:[String], 
+		required : true
     },
     Language:{
-      type:String,
-      required : true
-
+		type:String,
+		required : true
     },
     imdbRating:{
-      type: Number,
-      
-
+      	type: Number,
     },
     Plot: {
-      type:String, 
-      required : true
-
+		type:String, 
+		required : true
     },
     Writer: {
       type:String,
     },
     Director: {
-      type: String,
+      	type: String,
     },
     Theater: [
         { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Theater' 
+			type: mongoose.Schema.Types.ObjectId, 
+			ref: 'Theater' 
         }
     ],
-
-
-    
-
 })
 
 const Movie = model('movies', movieSchema)

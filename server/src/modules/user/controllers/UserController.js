@@ -46,7 +46,7 @@ exports.verifyOrderController = async (req, res) => {
     const uppercaseLetters = getUpperCaseLetters();
     
     try {
-        const { showtimeId, seatDetails, showTimeData, theaterName, theaterLocation, movieName } = req.body;
+        const { seatDetails, showTimeData, theaterName, theaterLocation, movieName, mobile_number} = req.body;
 
         
         let msg = (`Thanks for Booking with Us. 
@@ -63,7 +63,8 @@ exports.verifyOrderController = async (req, res) => {
             await userRepository.addSeatToShowtime(showTimeData._id, newSeat._id);
         }
         msg = msg+'\n\n book again ...'
-        whatsapp.sendMsg('8943788919', msg)
+        console.log(mobile_number,)
+        whatsapp.sendMsg(mobile_number, msg)
 
         res.status(201).json({ message: 'Seat booked successfully!' });
     } catch (error) {

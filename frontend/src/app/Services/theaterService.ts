@@ -35,10 +35,12 @@ export const getTheaterById = async ({ theaterId }: GetTheaterParams) => {
 // Function to get showtimes by theaterId, movieId, and date
 export const getShowtimes = async ({ theaterId, movieId, date }: GetShowtimesParams) => {
     try {
+
+        const formattedDate = date?date.toISOString().split('T')[0]:undefined;
         // Make an API call to get showtimes based on theaterId, movieId, and date
         console.log(theaterId, movieId, date, 'this is the data theaterId, movieId, date')
         const response = await axios.post('/theater/show-time', {
-            theaterId, movieId, date 
+            theaterId, movieId, formattedDate 
         });
         
         console.log(response.data, 'Showtimes fetched by theater, movie, and date');

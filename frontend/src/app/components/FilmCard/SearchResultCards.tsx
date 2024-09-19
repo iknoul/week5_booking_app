@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import FilmCard from './FlimCard';
+import { useAuth } from '@/app/hooks/useAuth';
+import { useRouter } from 'next/navigation';
 
 import { getMoviesByFilter } from './../../Services/movieService'; // Adjust import according to your project structure
 
-import styles from './FilmCards.module.css'
-import { useAuth } from '@/app/hooks/useAuth';
-import { useRouter } from 'next/navigation';
+import FilmCard from './FlimCard';
+
+import styles from './styles/FilmCards.module.css'
+
 interface SearchCardsProps {
     title?: string;
     theaterName?: string;

@@ -42,8 +42,6 @@ exports.addMovieController = async (req, res) => {
 exports.addTheaterController = async (req, res) => {
     try {
         const theaterData = req.body.theater;
-        console.log(theaterData)
-
 
         // Validate the incoming data (you can add custom validation logic here)
         if (!theaterData.name || !theaterData.location) {
@@ -65,8 +63,8 @@ exports.addTheaterController = async (req, res) => {
 
 exports.addShowController = async (req, res) => {
     try {
+        
         // Extract data from request
-        console.log(req.body, "the body")
         const showtimeData = req.body.data;
         const {movieId, theaterId, time, date} = showtimeData
 

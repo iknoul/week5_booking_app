@@ -7,6 +7,6 @@
 }
 .alert, .Spin{
     position: absolute;
-    margin-top: 15vh;
+    margin-top: 20vh;
     z-index: 101;
 }

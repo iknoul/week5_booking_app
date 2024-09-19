@@ -1,11 +1,13 @@
 'use client'
+import { useRef, MouseEventHandler} from "react";
 import Image from "next/image";
-import ButtonMain from "../Buttons/ButtonMain";
+
 import useImageColorExtractor from "../../hooks/useImageColorExtractor";
 
+import ButtonMain from "../Buttons/ButtonMain";
+
 import styles from './FilmCard.module.css';
-import { useRef, useEffect, MouseEventHandler} from "react";
-import { useRouter } from 'next/navigation';
+
 
 interface FilmCardProps {
     item: {
@@ -36,11 +38,11 @@ const FilmCard:React.FC<FilmCardProps> = ({item, callBackFunction=()=>{}, isButt
     // console.log(colors)
     // Update background color when colors are available
 
-//    useEffect(() => {
-//         if (divRef.current) {
-//             divRef.current.style.backgroundColor = colors?.length > 0 ? colors[0] : 'whitesmoke';
-//         }
-//     }, [colors]);
+    // useEffect(() => {
+    //    if (divRef.current) {
+    //        divRef.current.style.backgroundColor = colors?.length > 0 ? colors[0] : 'whitesmoke';
+    //    }
+    // }, [colors]);
 
     return (
         <div ref={divRef} className={styles.filmCard}>

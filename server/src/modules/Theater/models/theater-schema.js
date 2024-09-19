@@ -5,17 +5,17 @@ const model = mongoose.model
 
 const theaterSchema = new Schema({
     name: {
-      type:String,
-      required: true
+		type:String,
+		required: true
     },
     location: {
-      type:String, 
-      required: true
+		type:String, 
+		required: true
     },
     movie: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }],
     seatPrice: {
-      type:Number,
-      required: true
+		type:Number,
+		required: true
     },
     
 })
