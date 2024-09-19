@@ -5,12 +5,13 @@ interface GetMoviesParams {
     rating?: number; // Assuming rating is a number for filtering
     theater?: string;
     sortByRating?: boolean;
+    date?:string;
     limit?: number;
     title?: string;
     id?:string;
 }
 
-export const getMoviesByFilter = async ({ title, genre, rating, theater, sortByRating, limit}: GetMoviesParams) => {
+export const getMoviesByFilter = async ({ title, genre, rating, theater, sortByRating, limit, date}: GetMoviesParams) => {
     try {
 
         // Build the request payload
@@ -25,7 +26,7 @@ export const getMoviesByFilter = async ({ title, genre, rating, theater, sortByR
             payload.theaterName = theater;
         }
         if (sortByRating !== undefined) {
-            payload.sortByRating= true;
+            payload.sortByRating= sortByRating;
         }
         if(limit) {
             payload.limit = limit
@@ -33,6 +34,9 @@ export const getMoviesByFilter = async ({ title, genre, rating, theater, sortByR
         if(title) {
             payload.title = title
 
+        }
+        if(date) {
+            payload.showDate = date
         }
 
         // Send the request with the filter payload

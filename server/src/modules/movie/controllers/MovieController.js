@@ -1,7 +1,8 @@
 const Movie = require('./../models/movie-schema')
+const Showtime = require('../../Theater/models/show-time-schema');
 
 exports.getMovie = (req, res) => {
-    const { title, genre, minRating, maxRating, sortByRating, theaterName, limit = 10  } = req.body;
+    const { title, genre, minRating, maxRating, sortByRating, showDate, showTime, theaterName, limit = 10  } = req.body;
     
     // Build aggregation pipeline
     const pipeline = [];
@@ -42,6 +43,32 @@ exports.getMovie = (req, res) => {
         });
     }
 
+    // If showDate and showTime are provided, match movies with showtimes
+    if (showDate || showTime) {
+        console.log('here the dadte', showDate)
+        pipeline.push({
+            $lookup: {
+                from: 'showtimes', // The name of the showtimes collection
+                localField: '_id', // Movie ID in the Movie schema
+                foreignField: 'movieId', // Movie ID in the Showtime schema
+                as: 'showtimes' // The name of the output array in the result
+            }
+        });
+
+        const showtimeMatch = {};
+        if (showDate) {
+            showtimeMatch['showtimes.date'] = showDate; // Match specific show date
+        }
+        if (showTime) {
+            showtimeMatch['showtimes.time'] = showTime; // Match specific show time
+        }
+
+        pipeline.push({
+            $match: showtimeMatch
+        });
+    }
+
+
     // If minRating and/or maxRating are provided, filter movies by rating
     if (minRating !== undefined || maxRating !== undefined) {
         pipeline.push({
@@ -55,7 +82,8 @@ exports.getMovie = (req, res) => {
     }
 
     // If sortByRating is provided, sort movies by rating
-    if (sortByRating) {
+    if (sortByRating===true) {
+        console.log(sortByRating, "vyf ===== ")
         pipeline.push({
             $sort: {
                 imdbRating: -1 // 1 for ascending, -1 for descending

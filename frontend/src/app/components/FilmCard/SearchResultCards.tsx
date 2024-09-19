@@ -11,7 +11,9 @@ import styles from './styles/FilmCards.module.css'
 interface SearchCardsProps {
     title?: string;
     theaterName?: string;
-    // date?: string;
+    date?: string;
+    sortByRating?: boolean;
+    
     // show?: string;
 }
 

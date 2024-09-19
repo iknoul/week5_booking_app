@@ -11,6 +11,8 @@ import styles from './page.module.css'
 interface userinput{
   title?: string;
   theaterName?: string;
+  sortByRating?:boolean;
+  date?:string;
 }
 const Home = () =>{
 
