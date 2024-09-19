@@ -6,7 +6,7 @@ import useImageColorExtractor from "../../hooks/useImageColorExtractor";
 
 import ButtonMain from "../Buttons/ButtonMain";
 
-import styles from './FilmCard.module.css';
+import styles from './styles/FilmCard.module.css';
 
 
 interface FilmCardProps {
