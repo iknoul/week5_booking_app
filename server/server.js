@@ -1,12 +1,21 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const cron = require('node-cron');
 
 const dotenv = require('dotenv');
 dotenv.config({ path: './.env' });
 
 const passport = require('./config/passport-config')
+
 const db = require('./db');
+const deleteOutdatedShowtimes = require('./utils/cleanShowTimes'); // Adjust path as needed
+
+// Schedule the cleanup task to run daily at midnight
+cron.schedule('0 0 * * *', () => {
+  console.log('Running scheduled task to delete outdated showtimes...');
+  deleteOutdatedShowtimes();
+});
 
 
 const app = express();

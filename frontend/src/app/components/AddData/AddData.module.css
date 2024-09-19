@@ -1,5 +1,5 @@
 .addData {
-    min-width: 350px;
+    min-width: fit-content;
     max-width: 600px;
     padding: 20px;
     background-color: #fff;
@@ -8,7 +8,6 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    align-items: center;
     position: absolute;
     z-index: 100;
     top: 120px;
@@ -98,6 +97,7 @@
 .movieForm {
     margin-bottom: 30px;
     width: 100%;
+    max-width: 500px;
 }
 
 .movieForm input,

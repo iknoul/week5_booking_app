@@ -63,14 +63,23 @@ exports.addTheaterController = async (req, res) => {
 
 exports.addShowController = async (req, res) => {
     try {
-        
         // Extract data from request
-        const showtimeData = req.body.data;
-        const {movieId, theaterId, time, date} = showtimeData
+        const { movieId, theaterId, time, startDate, endDate } = req.body.data;
 
         // Validate input
-        if (!movieId || !theaterId || !time || !date) {
-            return res.status(400).json({ message: 'Movie ID, Theater ID, and showtime are required.' });
+        if (!movieId || !theaterId || !time || !startDate || !endDate) {
+            return res.status(400).json({ message: 'Movie ID, Theater ID, time, start date, and end date are required.' });
+        }
+
+        // Parse and validate date
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+            return res.status(400).json({ message: 'Invalid start date or end date.' });
+        }
+
+        if (start > end) {
+            return res.status(400).json({ message: 'Start date cannot be after end date.' });
         }
 
         // Check if the movie and theater exist
@@ -81,23 +90,41 @@ exports.addShowController = async (req, res) => {
             return res.status(404).json({ message: 'Movie or Theater not found.' });
         }
 
-        // Add the showtime
-        const newShowtime = await adminRepository.addShowtime(showtimeData);
+        // Add showtimes for each date between start and end date
+        let currentDate = start;
+        const showtimes = [];
 
-        // Add theater to the movie's theater array if it's not already present
-        if (!movie.Theater.includes(theaterId)) {
-            movie.Theater.push(theaterId);
-            await movie.save();
+        while (currentDate <= end) {
+            const formattedDate = currentDate.toISOString().split('T')[0]; // Format date as 'YYYY-MM-DD'
+            const showtimeData = {
+                movieId,
+                theaterId,
+                time,
+                date: formattedDate
+            };
+
+            // Create showtime and add to array
+            const newShowtime = await adminRepository.addShowtime(showtimeData);
+            showtimes.push(newShowtime);
+
+            // Add theater to the movie's theater array if it's not already present
+            if (!movie.Theater.includes(theaterId)) {
+                movie.Theater.push(theaterId);
+                await movie.save();
+            }
+
+            // Move to the next day
+            currentDate.setDate(currentDate.getDate() + 1);
         }
 
         // Send success response
         res.status(201).json({
             status: 'success',
-            data: newShowtime
+            data: showtimes
         });
     } catch (error) {
         // Handle errors
-        console.log(error)
+        console.log(error);
         res.status(500).json({
             status: 'error',
             message: error.message,

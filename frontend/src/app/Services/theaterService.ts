@@ -40,7 +40,7 @@ export const getShowtimes = async ({ theaterId, movieId, date }: GetShowtimesPar
         // Make an API call to get showtimes based on theaterId, movieId, and date
         console.log(theaterId, movieId, date, 'this is the data theaterId, movieId, date')
         const response = await axios.post('/theater/show-time', {
-            theaterId, movieId, formattedDate 
+            theaterId, movieId, date:formattedDate 
         });
         
         console.log(response.data, 'Showtimes fetched by theater, movie, and date');

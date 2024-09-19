@@ -6,7 +6,7 @@ import axios from '@/utils/axios'; // customized axios
 import FilmCard from '../FilmCard/FlimCard';
 import ButtonMain from '../Buttons/ButtonMain';
 
-import { Empty, Spin } from 'antd';
+import { Empty, Spin, DatePicker, TimePicker } from 'antd';
 import styles from './AddData.module.css';
 
 interface AddDataProps {
@@ -41,7 +41,8 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
 	const [searchedMovie, setSearchedMovie] = useState<searchedMovie>({})
 	const [searchedTheater, setSearchedTheater] = useState<searchedTheater>({name:'', location:""});
 	const [theater, setTheater] = useState('');
-    const [date, setDate] = useState(''); // For date
+    const [startDate, setStartDate] = useState(''); // For date
+    const [endDate, setEndDate] = useState(''); // For date
     const [time, setTime] = useState(''); // For time
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	
@@ -155,14 +156,15 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
 				break;
 
 			case "Show time":
-				if (theater && searchedMovie && time && date) {
+				if (theater && searchedMovie && time && startDate && endDate) {
 					// Clear previous error if any
 					setError(null);
 					// Proceed with submission logic
 					callbackFunction({
 						theaterId: searchedTheater._id,
 						movieId: searchedMovie._id ? searchedMovie._id : undefined,
-						date, 
+						startDate, 
+						endDate,
 						time }, item, purpose)
 				} else {
 					setError('*all data required');
@@ -435,11 +437,30 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
 				) : (
 					<Empty />
 				)}
+				
+				<DatePicker.RangePicker 
+					status="warning" style={{ width: '100%' }}
+					onChange={(e, stringDate)=>{
 
-				<span className={styles.dateInput}>
+						setStartDate(stringDate[0]);
+						setEndDate(stringDate[1]); // or join elements if needed
+					}}
+				/>
+				
+				<TimePicker 
+					onChange={(e, timeString) => {
+						if (Array.isArray(timeString)) {
+							// Handle the array case. For example, take the first element.
+							setTime(timeString[0]); // or join elements if needed
+						} else {
+							// If stringDate is already a string, just use it
+							setTime(timeString);
+						}						
+					}}/>
+				{/* <span className={styles.dateInput}>
 					<input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
 					<input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
-				</span> 
+				</span>  */}
 			</>
 			}
 			         

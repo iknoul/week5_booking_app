@@ -92,7 +92,7 @@ const Booking: React.FC = () => {
 		setSelectedDate(date);
 		// Convert the Date object to a string in the format 'YYYY-MM-DD' if needed
 		if (date) {
-		console.log('Selected Date (formatted):', date);
+			console.log('Selected Date (formatted):', date);
 		}
 	};
 
@@ -162,8 +162,8 @@ const Booking: React.FC = () => {
 			try {
 			const response = await getShowtimes({
 				theaterId: selectedTheater._id,
+				movieId: movie?._id,
 				date: selectedDate,
-					movieId: movie?._id
 			});
 			console.log(response)
 			setShowtimes(response.data); // Assuming response contains showtimes
@@ -206,7 +206,7 @@ const Booking: React.FC = () => {
 
 				{bookingStage === 'theaterSelection' && (
 				<>
-						<select onChange={handleTheaterChange} value={selectedTheater.name}>
+						<select onChange={handleTheaterChange}>
 							<option value="">Select a theater</option>
 							{theaters.map((theater, index) => (
 								<option key={index} value={index}>

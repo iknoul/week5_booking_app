@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '@/app/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 
 import { getMoviesByFilter } from './../../Services/movieService'; // Adjust import according to your project structure
@@ -21,17 +20,13 @@ interface SearchCardsProps {
 const SearchResultCards: React.FC<SearchCardsProps> = (props) => {
     const [results, setResults] = useState<object[]>([]);
 
-    const {isAuthenticated} = useAuth()
     const router = useRouter();
 
     const handleOnClick = (item: object) => {
-        if (!isAuthenticated) {
-            router.push('/Login');
-        } else {
-            // Use encodeURIComponent for the stringified movie object
-            const movieData = encodeURIComponent(JSON.stringify(item));
-            router.push(`/Booking?movie=${movieData}`);
-        }
+
+         // Use encodeURIComponent for the stringified movie object
+         const movieData = encodeURIComponent(JSON.stringify(item));
+         router.push(`/Booking?movie=${movieData}`);
     }
 
     // Function to fetch images based on the search parameters
