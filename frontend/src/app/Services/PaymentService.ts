@@ -1,5 +1,6 @@
 import axios from "@/utils/axios";
-import { useAuth } from "../hooks/useAuth";
+
+const PAYMENT_SERVICE_KEY = process.env.NEXT_PUBLIC_PAYMENT_SERVICE_KEY;
 
 
 interface RazorpayResponse {
@@ -20,20 +21,30 @@ interface payment {
     theaterName:string;
     theaterLocation: string;
     movieName?: string;
+    token?: string;
 }
 
-const handlePayment = async ({amountToBePaid, seatDetails, showtimeId, setSuccess, setFail, showTimeData, theaterName, theaterLocation, movieName}:payment) => {
+const handlePayment = async ({amountToBePaid, seatDetails, showtimeId, setSuccess, setFail, showTimeData, theaterName, theaterLocation, movieName, token}:payment) => {
 
-  const { token } = useAuth() 
+  // console.log('here inside payment but')
+
+  console.log('here inside payment but')
+
   
     try {
       // Request the server to create an order
-      const { data } = await axios.post('user/create-order', { amount: amountToBePaid }); // Amount in smallest currency unit (e.g., 500 paise = 5 INR)
+      const { data } = await axios.post('user/create-order', 
+        { amount: amountToBePaid },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Token from props
+          },
+        }
+      ); // Amount in smallest currency unit (e.g., 500 paise = 5 INR)
   
       const { orderId, amount } = data.data;
-  
       const options = {
-        key: 'rzp_test_OZZv3kK0jph7j5', // Your Razorpay Key ID
+        key: PAYMENT_SERVICE_KEY, // Your Razorpay Key ID
         amount: amount,
         currency: 'INR',
         name: 'Book your ticket',

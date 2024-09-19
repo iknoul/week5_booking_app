@@ -5,6 +5,8 @@ import ButtonMain from '../Buttons/ButtonMain';
 import payment from '@/app/Services/PaymentService'
 import {Alert} from 'antd'
 import { useRouter } from 'next/navigation';
+import { useAuth } from "../../hooks/useAuth";
+
 import styles from './seatArrangement.module.css' // Optional: For custom styling
 
 
@@ -32,6 +34,9 @@ const SeatArrangement: React.FC<SeatArrangementProps> = ({ rows, columns, seatsT
     const [success, setSuccess] = useState(false)
     const [fail, setFail] = useState(false)
 
+    const { token } = useAuth() 
+
+
   const handleBook = async()=>{
     
     try {
@@ -44,7 +49,8 @@ const SeatArrangement: React.FC<SeatArrangementProps> = ({ rows, columns, seatsT
         showTimeData,
         theaterName,
         theaterLocation,
-        movieName
+        movieName,
+		token
       });
       // setSuccess(true)
       // setTimeout(()=>{

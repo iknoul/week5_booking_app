@@ -59,6 +59,7 @@ exports.verifyOrderController = async (req, res) => {
             console.log(seatDetails)
             console.log({number:seatDetails[i]})
             const newSeat = await userRepository.createSeat({number:seatDetails[i]});
+            console.log(showTimeData, showTimeData._id)
             await userRepository.addSeatToShowtime(showTimeData._id, newSeat._id);
         }
         msg = msg+'\n\n book again ...'

@@ -11,6 +11,7 @@ const NavBar = ()=>{
 
     const router = useRouter()
     const { isAuthenticated, logout, user, oAuthStatus, role } = useAuth()
+    console.log(role, 'role in navBaar ===')
     
     return(
     <div className={styles.navBar}>

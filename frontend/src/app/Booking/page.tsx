@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { getTheaterById, getShowtimes} from './../Services/theaterService'; // Assuming getShowtimesByTheaterAndDate exists
 import SeatArrangement from '../components/SeatArrangment/SeatArrangement';
 import Image from 'next/image';
+import { Empty } from 'antd';
 import ButtonMain from '../components/Buttons/ButtonMain';
 import { useSearchParams } from 'next/navigation';
 import styles from './booking.module.css';
@@ -43,7 +44,7 @@ const Booking: React.FC = () => {
   const [bookingStage, setBookingStage] = useState<string>('theaterSelection');
   const [selectedTheater, setSelectedTheater] = useState<Theater>({});
   const [selectedShowtime, setSelectedShowtime] = useState<showtime>({});
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);; // Date for showtime selection
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);; // Date for showtime selection
   const [numberOfSeats, setNumberOfSeats] = useState<number>(1);
   const [theaters, setTheaters] = useState<Array<Array<Theater>>>([]);;
   const [showtimes, setShowtimes] = useState<showtime[]>([]); // Now will contain fetched showtimes
@@ -78,10 +79,10 @@ const Booking: React.FC = () => {
   };
 
   const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
     // Convert the Date object to a string in the format 'YYYY-MM-DD' if needed
     if (date) {
       const formattedDate = date.toISOString().split('T')[0];
+      setSelectedDate(formattedDate);
       console.log('Selected Date (formatted):', formattedDate);
     }
   };
@@ -150,7 +151,7 @@ const Booking: React.FC = () => {
           const response = await getShowtimes({
             theaterId: selectedTheater._id,
             date: selectedDate,
-			movieId: movie?._id
+			      movieId: movie?._id
           });
 		  console.log(response)
           setShowtimes(response.data); // Assuming response contains showtimes
@@ -228,8 +229,10 @@ const Booking: React.FC = () => {
               </>
             )}
 
-			{bookingStage === 'selectShow' && (
+			{bookingStage === 'selectShow' && 
 				<>
+        {showtimes.length>0 ?(
+        <>
 				<select onChange={handleShowtimeChange} value={selectedShowtime.time}>
                   <option value="">Select a showtime</option>
                   {showtimes.map((showtime, index) => (
@@ -254,8 +257,11 @@ const Booking: React.FC = () => {
                 >
                   Next
                 </ButtonMain>
+        </>
+        ):
+        <Empty/>}
 				</>
-			)}
+			}
           </div>
         </div>
       )}
@@ -264,21 +270,21 @@ const Booking: React.FC = () => {
         <>
           <h2>Select Seats</h2>
           <SeatArrangement 
-		  	rows={5} 
-			columns={10} 
-			seatsToBook={numberOfSeats}  
-			amountTobePaid={
-				selectedTheater.seatPrice 
-				? numberOfSeats * (selectedTheater.seatPrice) 
-				: undefined
-			}
-			bookedSeats={selectedShowtime.bookedSeats}
-			showtimeId={selectedShowtime._id}
-			showTimeData={selectedShowtime}
-			theaterName={selectedTheater.name}
-			theaterLocation={selectedTheater.location}
-			movieName={movie?.Title}	
-			/>
+            rows={5} 
+            columns={10} 
+            seatsToBook={numberOfSeats}  
+            amountTobePaid={
+              selectedTheater.seatPrice 
+              ? numberOfSeats * (selectedTheater.seatPrice) 
+              : undefined
+            }
+            bookedSeats={selectedShowtime.bookedSeats}
+            showtimeId={selectedShowtime._id}
+            showTimeData={selectedShowtime}
+            theaterName={selectedTheater.name}
+            theaterLocation={selectedTheater.location}
+            movieName={movie?.Title}	
+			    />
         </>
       )}
 
@@ -289,6 +295,7 @@ const Booking: React.FC = () => {
         <div className={styles.cast}>
           {actorsArray.map((item, index) => (
             <span key={index}>
+              <img src="" alt="" />
               <p>{item}</p>
             </span>
           ))}

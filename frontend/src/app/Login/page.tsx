@@ -15,13 +15,14 @@ import styles from './login.module.css'
 import { useEffect, useState } from "react";
 
 
-
 const LoginPage:React.FC = ()=>{
 
 
     const router = useRouter()
     const searchParams = useSearchParams();
     const temptoken = searchParams?.get('token') ?? '';  // Retrieve the token from query params
+
+    const [otpSendStatus, setOtpSendStatus] = useState<number>(0)
 
     const {isAuthenticated, login, oAuthStatus, setOAuthStatus, setUserData, setRole, setToken, token} = useAuth()
 
@@ -36,7 +37,8 @@ const LoginPage:React.FC = ()=>{
 				console.log(token, 'token from tempy token')
 				console.log(payload, 'payload of token')
 				setToken(token); 
-				setUserData(payload.user);
+				const user:any= (payload.user);
+        setUserData(user.user)
 				setRole(payload.role)
 				setOAuthStatus(true)
             } catch (error) {
@@ -56,8 +58,10 @@ const LoginPage:React.FC = ()=>{
 				Authorization: `Bearer ${token}`, // Token from props
 			},
 		});
+      setOtpSendStatus(1)
       console.log('OTP sent successfully:', result.data);
     } catch (error) {
+      setOtpSendStatus(2)
       console.error('Error sending OTP:', error);
     }
   };
@@ -74,10 +78,13 @@ const LoginPage:React.FC = ()=>{
           },
         }
       );
+      setOtpSendStatus(3)
       console.log('OTP verified successfully:', result.data);
-      verifyToken(result.data.registrationToken); // Call verifyToken with the registrationToken
-	  login()
+      verifyToken(result.data.loginToken); // Call verifyToken with the registrationToken
+	    login()
     } catch (error) {
+
+      setOtpSendStatus(4)
       console.error('Error verifying OTP:', error);
     }
   };
@@ -124,7 +131,7 @@ const LoginPage:React.FC = ()=>{
 
             {
               oAuthStatus && !isAuthenticated &&
-              <InputText sendOtpHandler={sendOtpHandler} otpVerifyHandler={otpVerifyHandler}/>
+              <InputText sendOtpHandler={sendOtpHandler} otpVerifyHandler={otpVerifyHandler} otpSendStatus={otpSendStatus}/>
             }
 
         </div>

@@ -11,6 +11,7 @@ import PrivateRoute from '../components/PrivateRouter'
 import styles from './adminDashBoard.module.css'
 import { useState } from 'react'
 import Item from 'antd/es/list/Item'
+import { useAuth } from '../hooks/useAuth';
 
 const AdminDashBoard:React.FC = ()=>{
 
@@ -18,6 +19,7 @@ const AdminDashBoard:React.FC = ()=>{
     const [fail, setFail] = useState(false)
     const [loading, setLoading] = useState(false)
     const [selectedItem, setSelectedItem] = useState({ item: '', purpose: '' });
+    const {token} = useAuth()
 
 
     const callbackFunction = async(data?:object, item?:string, puprose?: string)=>{
@@ -67,7 +69,14 @@ const AdminDashBoard:React.FC = ()=>{
     const makeNewTheater = async(theater:object)=>{
         setLoading(true)
         console.log('here')
-        const response = await axios.post('/admin/add-theater',{theater})
+        const response = await axios.post('/admin/add-theater',
+            {theater},
+            {
+                headers: {
+                  Authorization: `Bearer ${token}`, // Token from props
+                },
+            }
+        )
         await new Promise((resolve) => setTimeout(resolve, 5000));
         console.log(response)
 
@@ -88,7 +97,13 @@ const AdminDashBoard:React.FC = ()=>{
     const makeNewMovie = async(movie:object) =>{
         setLoading(true)
         console.log('here')
-        const response = await axios.post('/admin/add-movie',{movie})
+        const response = await axios.post('/admin/add-movie',
+            {movie},
+            {
+                headers: {
+                  Authorization: `Bearer ${token}`, // Token from props
+                },
+            })
         await new Promise((resolve) => setTimeout(resolve, 5000));
         console.log(response)
 
@@ -109,7 +124,13 @@ const AdminDashBoard:React.FC = ()=>{
         setLoading(true)
         console.log(data, "here inside the make new")
         try {
-            await axios.post('/admin/add-show-time', data);
+            await axios.post('/admin/add-show-time', 
+                {data},
+                {
+                    headers: {
+                      Authorization: `Bearer ${token}`, // Token from props
+                    },
+                });
             setSuccess(true)
             setSelectedItem({item:'', purpose:''})
             setTimeout(()=>{setSuccess(false)}, 5000)

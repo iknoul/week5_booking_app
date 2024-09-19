@@ -38,12 +38,12 @@ exports.verifyOTP = async(req, res, next) => {
    
   if (otpService.verifyOTP(mobile_number, OTP)) {
 
-      const admin = await Admin.findOne({email: user.email})
+      const admin = await Admin.findOne({ email: user.user.email})
       let loginToken = null
 
       if(admin)
       {
-        loginToken = jwt.createToken({ user, mobile_number, stage:'otpVerified', role:'admin'})
+         loginToken = jwt.createToken({ user, mobile_number, stage:'otpVerified', role:'admin'})
       }
       else
       {

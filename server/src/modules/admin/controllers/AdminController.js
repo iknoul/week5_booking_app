@@ -67,7 +67,7 @@ exports.addShowController = async (req, res) => {
     try {
         // Extract data from request
         console.log(req.body, "the body")
-        const showtimeData = req.body;
+        const showtimeData = req.body.data;
         const {movieId, theaterId, time, date} = showtimeData
 
         // Validate input

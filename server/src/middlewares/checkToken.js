@@ -14,7 +14,7 @@ exports.checkToken = (steps, not, requiredRole)=>{
             console.log(bToken)
         
             if(!bToken){
-                res.status(403).json({success:false,message:'you are not authorized'})
+                res.status(403).json({success:false,message:'you are not authorized no btoken'})
             }
             const token = bToken.slice(7)
 
@@ -41,8 +41,8 @@ exports.checkToken = (steps, not, requiredRole)=>{
                 // Check if the current step is NOT in the required steps
                 const currentStepNotAllowed = decodedSteps.every(step => steps.indexOf(step) === -1);
                 console.log(currentStepNotAllowed, 'current')
-                if (!not && currentStepNotAllowed) {
-                    return res.status(403).json({ message: 'you are not authorized' });
+                if (not && currentStepNotAllowed) {
+                    return res.status(403).json({ message: 'you are not authorized here' });
                 }
             }
 
@@ -51,12 +51,12 @@ exports.checkToken = (steps, not, requiredRole)=>{
                 return res.status(403).json({ message: 'you are not authorized' });
             }
             console.log(decoded)
-            req.body.user = decoded;
+            req.body.user = decoded.user;
 
             // req.body.user = {email:'21352050@pondiuni.ac.in'}
             next()
         } catch (error) {
-            return res.status(403).json({message:'you are not authorized'})
+            return res.status(403).json({message:'you are not authorized error catch'})
         }
     }
 }

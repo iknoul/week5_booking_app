@@ -57,7 +57,9 @@ exports.getTheater = (req, res) => {
 
 
 exports.getShowtimes = async (req, res) => {
-    const { theaterId, movieId, date } = req.query;
+    const { theaterId, movieId, date } = req.body;
+
+    console.log('quary herreee',  theaterId, movieId, date)
 
     try {
         // Convert date to string if it's provided
@@ -65,23 +67,37 @@ exports.getShowtimes = async (req, res) => {
 
         // Create a query object
         const query = {};
+         // Add filters to query object if they exist
+         if (theaterId) query.theaterId = new mongoose.Types.ObjectId(theaterId);
+         if (movieId) query.movieId = new mongoose.Types.ObjectId(movieId);
+         if (formattedDate) query.date = String(formattedDate);
+         console.log( query.date, "date converted to string")
 
-        // Add filters to query object if they exist
-        if (theaterId) query.theaterId = new mongoose.Types.ObjectId(theaterId);
-        if (movieId) query.movieId = new mongoose.Types.ObjectId(movieId);
-        if (formattedDate) query.date = formattedDate;
+
+        // Handle date range
+        // if (date) {
+        //     const startOfDay = new Date(date);
+        //     startOfDay.setUTCHours(0, 0, 0, 0); // Start of the day
+        //     const endOfDay = new Date(date);
+        //     endOfDay.setUTCHours(23, 59, 59, 999); // End of the day
+
+        //     query.date = String({ $gte: startOfDay, $lte: endOfDay });
+        //     console.log(date, "date converted to string")
+        // }
+
+        console.log('', query)
 
         // Fetch showtimes based on the provided theaterId, movieId, and formatted date
         const showtimes = await Showtime.find(query).exec();
 
         res.status(200).json({
             status: 'success',
-            data: showtimes
+            data: showtimes,
         });
     } catch (err) {
         res.status(500).json({
             status: 'error',
-            message: err.message
+            message: err.message,
         });
     }
 };

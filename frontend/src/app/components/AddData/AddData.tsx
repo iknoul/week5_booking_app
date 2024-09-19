@@ -4,6 +4,7 @@ import axiosO from 'axios';
 import axios from '@/utils/axios';
 
 import FilmCard from '../FilmCard/FlimCard';
+import ButtonMain from '../Buttons/ButtonMain';
 
 import { Empty, Spin } from 'antd';
 import styles from './AddData.module.css';
@@ -237,7 +238,10 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
 				<div className={styles.movieSearch}>
 					<label htmlFor="search-movie"></label>
 					<input type="text" id='search-movie' placeholder='search-movie' onChange={onSearchMovieChange} />
-					<button onClick={()=>{searchNewMovie(true)}}>search</button>
+					<ButtonMain bg='red' callbackFunction={()=>{searchNewMovie(true)}}>
+						search
+					</ButtonMain>
+					{/* <button onClick={()=>{searchNewMovie(true)}}></button> */}
 				</div>
 
 				{!isEmpty(searchedMovie) ?
@@ -410,7 +414,10 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
 				<div className={styles.movieSearch}>
 					<label htmlFor="search-movie"></label>
 					<input type="text" id='search-movie' placeholder='search-movie' onChange={onSearchMovieChange} />
-					<button onClick={()=>{searchNewMovie()}}>search</button>
+					
+					<ButtonMain bg='red' callbackFunction={()=>{searchNewMovie()}}>
+						search
+					</ButtonMain>
 				</div>
 
 				{!isEmpty(searchedMovie) ?
@@ -427,7 +434,10 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
 						value={theater}
 						onChange={onSearchTheaterChange}
 					/>
-					<button onClick={searchNewTheater}>search theater</button>
+					{/* <button onClick={searchNewTheater}>search theater</button> */}
+					<ButtonMain bg='red' callbackFunction={searchNewTheater}>
+						search theater
+					</ButtonMain>
 				</div>
 
 				{!isEmpty(searchedTheater) ? (
@@ -453,8 +463,12 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, visible = false, callb
 			{error && <div className={styles.error}>{error}</div>}
 
 			<div className={styles.buttonGroup}>
-				<button onClick={onCancel}>Cancel</button>
-				<button onClick={onSubmit}>Submit</button>
+				<ButtonMain bg='red' callbackFunction={onCancel}>
+					Cancel
+				</ButtonMain>
+				<ButtonMain bg='red' callbackFunction={onSubmit}>
+					Submit
+				</ButtonMain>
 			</div>
 		</div>
 	);

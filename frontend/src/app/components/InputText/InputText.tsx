@@ -5,9 +5,10 @@ import styles from './inputText.module.css';
 interface myProps {
   otpVerifyHandler: (phoneNumber: string, otp: string) => void;
   sendOtpHandler: (phoneNumber: string) => void;
+  otpSendStatus: number;
 }
 
-const InputText: React.FC<myProps> = ({ otpVerifyHandler, sendOtpHandler }) => {
+const InputText: React.FC<myProps> = ({ otpVerifyHandler, sendOtpHandler, otpSendStatus}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [otp, setOtp] = useState('');
 
@@ -44,9 +45,18 @@ const InputText: React.FC<myProps> = ({ otpVerifyHandler, sendOtpHandler }) => {
 
       {/* Button to send OTP */}
       
-      <ButtonMain bg='black' callbackFunction={handleSendOtp} disabled={!phoneNumber}>
-            Verify OTP
-      </ButtonMain>
+      {
+        otpSendStatus == 0&&
+        <ButtonMain bg='black' callbackFunction={handleSendOtp} disabled={!phoneNumber}>
+            Send OTP
+        </ButtonMain>
+      }
+      {otpSendStatus == 1 &&
+        <p className={styles.success}>Otp send succesfully</p>
+      }
+      {otpSendStatus === 2 &&
+        <p className={styles.fail}>Error sending OTP</p>
+      }
 
       {/* Input field to enter OTP */}
       <input
@@ -62,6 +72,13 @@ const InputText: React.FC<myProps> = ({ otpVerifyHandler, sendOtpHandler }) => {
       <ButtonMain bg='black' callbackFunction={handleVerifyOtp} disabled={!otp || !phoneNumber}>
         Verify OTP
       </ButtonMain>
+
+      {otpSendStatus === 3 &&
+        <p className={styles.success}>OTP verified successfully</p>
+      }
+      {otpSendStatus == 4 &&
+        <p className={styles.fail}>Error verifying OTP</p>
+      }
     </div>
   );
 };
