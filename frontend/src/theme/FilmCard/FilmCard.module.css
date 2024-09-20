@@ -30,11 +30,15 @@
 }
 .filmCard h3{
     padding-left: 5px;
-    font-size: 14px;
+    font-size: 14px !important;
+    font-weight: 500 !important;
     color: rgba(0, 0, 0, 0.445) !important;
 }
 .filmCard .lang{
     font-size: 12px !important;
+    text-wrap: none;
+    white-space: nowrap;
+    overflow-x: auto;
     text-align: left;
 }
 .title{
@@ -45,10 +49,7 @@
     width: fit-content !important;
 }
 .actors{
-    width: fit-content;
-    display: flex;
-    flex-shrink: 0;
-    flex-wrap: nowrap;
+    text-wrap: none;
     white-space: nowrap;
     overflow-x: auto;
 }

@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 
-import ButtonMain from '../Buttons/ButtonMain';
+import ButtonMain from '@/theme/Buttons/ButtonMain';
 
 import styles from './otpInput.module.css';
 

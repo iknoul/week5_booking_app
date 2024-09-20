@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { getMoviesByFilter } from './../../Services/movieService'
+import { getMoviesByFilter } from '../../Services/movieService'
 
-import FilmCard from './FlimCard'
+import FilmCard from '@/theme/FilmCard/FlimCard'
 
-import styles from './styles/FilmCards.module.css'
+import styles from './FilmCards.module.css'
 
 
 const FilmCards = () =>{

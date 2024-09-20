@@ -1,6 +1,6 @@
     'use client'
 
-    import {getMoviesByFilter} from './../../Services/movieService'
+    import {getMoviesByFilter} from '../../Services/movieService'
     import { useEffect, useState } from 'react'
     // import { promotionCarData } from '@/lib/data'
 

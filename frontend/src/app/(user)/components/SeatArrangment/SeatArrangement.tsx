@@ -6,10 +6,10 @@ import {Alert} from 'antd'
 
 import payment from '@/app/Services/PaymentService'
 
-import { useAuth } from "../../hooks/useAuth";
-import {fetchSeatNumbers } from './../../Services/theaterService'; // Assuming getShowtimesByTheaterAndDate exists
+import { useAuth } from "@/app/hooks/useAuth";
+import {fetchSeatNumbers } from '@/app/Services/theaterService'; // Assuming getShowtimesByTheaterAndDate exists
 
-import ButtonMain from '../Buttons/ButtonMain';
+import ButtonMain from '@/theme/Buttons/ButtonMain';
 
 
 import styles from './seatArrangement.module.css' // Optional: For custom styling

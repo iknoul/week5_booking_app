@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 
 import { decodeToken } from '@/utils/decodeToken';
 import { useAuth } from "@/app/hooks/useAuth";
-import axios from './../../utils/axios'
+import axios from '@/utils/axios'
 
 import AuthComponent from '../components/AuthComponent/AuthComponent';
 import OtpInput from '../components/OtpInput/OtpInput';
@@ -44,26 +44,26 @@ const LoginPage:React.FC = ()=>{
         } 
 
     }
-   // Handler to send OTP
-  const sendOtpHandler = async (mobile_number:string) => {
-	console.log(token, "token from useAuth")
-    try {
-      	const result = await axios.post(`/auth/send-otp`, 
-		{ mobile_number },
-		{
-			headers: {
-				Authorization: `Bearer ${token}`, // Token from props
-			},
-		});
-      setOtpSendStatus(1)
-      console.log('OTP sent successfully:', result.data);
-    } catch (error) {
-      setOtpSendStatus(2)
-      console.error('Error sending OTP:', error);
-    }
-  };
+   	// Handler to send OTP
+	const sendOtpHandler = async (mobile_number:string) => {
+		console.log(token, "token from useAuth")
+		try {
+			const result = await axios.post(`/auth/send-otp`, 
+			{ mobile_number },
+			{
+				headers: {
+					Authorization: `Bearer ${token}`, // Token from props
+				},
+			});
+		setOtpSendStatus(1)
+		console.log('OTP sent successfully:', result.data);
+		} catch (error) {
+		setOtpSendStatus(2)
+		console.error('Error sending OTP:', error);
+		}
+	};
 
-  // Handler to verify OTP
+  	// Handler to verify OTP
 	const otpVerifyHandler = async (mobile_number:string, otp: string) => {
 		try {
 			const result = await axios.post(
@@ -112,11 +112,9 @@ const LoginPage:React.FC = ()=>{
     return(
 
     <div className={styles.loginPage}>
-
-        
+ 
         <div className={styles.loginBanner}>
-    
-            
+
         </div>
 
         <div className={styles.logInContainer}>

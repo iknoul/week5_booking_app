@@ -6,11 +6,11 @@ import Image from 'next/image';
 import { Empty } from 'antd';
 import DatePicker from 'react-datepicker'; // Add react-datepicker for date selection
 
-import { getTheaterById, getShowtimes} from './../Services/theaterService'; // Assuming getShowtimesByTheaterAndDate exists
+import { getTheaterById, getShowtimes} from '../../Services/theaterService'; // Assuming getShowtimesByTheaterAndDate exists
 
 import SeatArrangement from '../components/SeatArrangment/SeatArrangement';
-import ButtonMain from '../components/Buttons/ButtonMain';
-import PrivateRoute from '../components/PrivateRouter';
+import ButtonMain from '@/theme/Buttons/ButtonMain';
+import PrivateRoute from '@/app/components/PrivateRouter';
 
 import 'react-datepicker/dist/react-datepicker.css'; // Datepicker styles
 import styles from './booking.module.css';
@@ -119,7 +119,10 @@ const Booking: React.FC = () => {
 	// set movie data when params change
 	useEffect(() => {
 		if (searchParams) {
+
 			const movieData = searchParams.get('movie');
+			
+
 			if (movieData) {
 				try {
 					const decodedMovieData = decodeURIComponent(movieData);
@@ -131,24 +134,43 @@ const Booking: React.FC = () => {
 					console.error('Error parsing movie data:', error);
 				}
 			}
+
+			
 		}
 	}, [searchParams]);
 
 	// set theaters data when movie change
 	useEffect(() => {
+
+		const theaterData = searchParams.get('theater')
+		const date = searchParams.get('date')
+
 		const fetchTheaters = async () => {
 		if (movie?.Theater) {
 			try {
 				const results = await Promise.all(
-					movie.Theater.map(async theaterId => {
-					const response = await getTheaterById({ theaterId });
-					console.log(response)
-					return response.data;
+					movie.Theater.map(async (theaterId, index) => {
+						const response = await getTheaterById({ theaterId });
+						if(theaterData && theaterData === response.data[index]?.name){
+							
+							setSelectedTheater(response.data[index])
+						}
+						
+						return response.data;
 					})
 				);
 				setTheaters(results);
 			} catch (error) {
 				console.error('Error fetching theater data:', error);
+			}
+
+			if (typeof date === 'string') {
+
+				const parsedDate = new Date(date);	
+				// Check if the parsed date is valid
+				if (!isNaN(parsedDate.getTime())) {
+				 	setSelectedDate(parsedDate);
+				} 
 			}
 		}
 		};
@@ -160,15 +182,14 @@ const Booking: React.FC = () => {
 		const fetchShowtimes = async () => {
 		if (selectedTheater && selectedDate) {
 			try {
-			const response = await getShowtimes({
-				theaterId: selectedTheater._id,
-				movieId: movie?._id,
-				date: selectedDate,
-			});
-			console.log(response)
-			setShowtimes(response.data); // Assuming response contains showtimes
+				const response = await getShowtimes({
+					theaterId: selectedTheater._id,
+					movieId: movie?._id,
+					date: selectedDate,
+				});
+				setShowtimes(response.data); // Assuming response contains showtimes
 			} catch (error) {
-			console.error('Error fetching showtimes:', error);
+				console.error('Error fetching showtimes:', error);
 			}
 		}
 		};
@@ -206,8 +227,8 @@ const Booking: React.FC = () => {
 
 				{bookingStage === 'theaterSelection' && (
 				<>
-						<select onChange={handleTheaterChange}>
-							<option value="">Select a theater</option>
+						<select onChange={handleTheaterChange} >
+							<option value="">{selectedTheater.name?selectedTheater.name:"select a theater"}</option>
 							{theaters.map((theater, index) => (
 								<option key={index} value={index}>
 									{`${theater[0]?.name}`}

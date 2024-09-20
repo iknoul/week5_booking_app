@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
 import { useAuth } from '@/app/hooks/useAuth'
-import ButtonMain from '../Buttons/ButtonMain'
+import ButtonMain from '@/theme/Buttons/ButtonMain'
 
 import styles from './navBar.module.css'
 

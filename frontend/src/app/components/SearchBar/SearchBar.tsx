@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 
 import Image from 'next/image';
 
-import type { MenuProps } from 'antd';
-import { Dropdown, Switch} from 'antd';
+import { Dropdown, Switch, MenuProps} from 'antd';
 
 import filterIocn from '@/../public/icons/filterIcon.svg';
 
-import ButtonMain from '../Buttons/ButtonMain';
+import ButtonMain from '@/theme/Buttons/ButtonMain';
+
 import styles from './searchBar.module.css';
 
 interface SetSearchParams {

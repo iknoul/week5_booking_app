@@ -3,8 +3,8 @@ import React, { useState, ChangeEvent } from 'react';
 import axiosO from 'axios'; // default axios
 import axios from '@/utils/axios'; // customized axios
 
-import FilmCard from '../FilmCard/FlimCard';
-import ButtonMain from '../Buttons/ButtonMain';
+import FilmCard from '@/theme/FilmCard/FlimCard';
+import ButtonMain from '@/theme/Buttons/ButtonMain';
 
 import { Empty, Spin, DatePicker, TimePicker } from 'antd';
 import styles from './AddData.module.css';

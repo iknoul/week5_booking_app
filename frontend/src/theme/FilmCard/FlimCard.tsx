@@ -2,11 +2,11 @@
 import { useRef, MouseEventHandler} from "react";
 import Image from "next/image";
 
-import useImageColorExtractor from "../../hooks/useImageColorExtractor";
+import useImageColorExtractor from "@/app/hooks/useImageColorExtractor";
 
-import ButtonMain from "../Buttons/ButtonMain";
+import ButtonMain from "../../theme/Buttons/ButtonMain";
 
-import styles from './styles/FilmCard.module.css';
+import styles from './FilmCard.module.css';
 
 
 interface FilmCardProps {
