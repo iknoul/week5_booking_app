@@ -11,10 +11,13 @@ const passport = require('./config/passport-config')
 const db = require('./db');
 const deleteOutdatedShowtimes = require('./utils/cleanShowTimes'); // Adjust path as needed
 
+// Remove out dated show times and associated seats
+	deleteOutdatedShowtimes()
+	
 // Schedule the cleanup task to run daily at midnight
 cron.schedule('0 0 * * *', () => {
-  console.log('Running scheduled task to delete outdated showtimes...');
-  deleteOutdatedShowtimes();
+    console.log('Running scheduled task to delete outdated showtimes...');
+    deleteOutdatedShowtimes();
 });
 
 
@@ -46,5 +49,5 @@ app.use('/theater', theaterRoute)
 
 
 const server = app.listen(process.env.PORT || 8888, () => {
-  console.log(`Express running → On PORT : ${server.address().port}`);
+  	console.log(`Express running → On PORT : ${server.address().port}`);
 });
