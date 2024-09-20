@@ -23,21 +23,23 @@ const LoginPage:React.FC = ()=>{
 
     const {isAuthenticated, login, oAuthStatus, setOAuthStatus, setUserData, setRole, setToken, token} = useAuth()
 
-
-
-
-    const verifyToken = (token:string)=>{
+    const storeToken = (token:string, type:'userDataToken'|'authToken')=>{
         const payload = decodeToken(token)
+		console.log(payload, "called payload")
         if (payload) {
+			
             try {
-				sessionStorage.setItem('token', token)
-				console.log(token, 'token from tempy token')
-				console.log(payload, 'payload of token')
-				setToken(token); 
-				const user:any= (payload.user);
-        setUserData(user)
-				setRole(payload.role)
-				setOAuthStatus(true)
+				sessionStorage.setItem(type, token)
+				if(type == "userDataToken"){
+					const user:any = (payload.user);
+        			setUserData(user)
+					setOAuthStatus(true)
+				} else {
+					setToken(token); 
+					setRole(payload.role)
+					login()
+				}
+
             } catch (error) {
               	console.error(error)
             }            
@@ -46,7 +48,8 @@ const LoginPage:React.FC = ()=>{
     }
    	// Handler to send OTP
 	const sendOtpHandler = async (mobile_number:string) => {
-		console.log(token, "token from useAuth")
+		console.log(temptoken, "token from useAuth")
+		const token = sessionStorage.getItem('userDataToken')
 		try {
 			const result = await axios.post(`/auth/send-otp`, 
 			{ mobile_number },
@@ -54,7 +57,7 @@ const LoginPage:React.FC = ()=>{
 				headers: {
 					Authorization: `Bearer ${token}`, // Token from props
 				},
-			});
+		});
 		setOtpSendStatus(1)
 		console.log('OTP sent successfully:', result.data);
 		} catch (error) {
@@ -65,6 +68,7 @@ const LoginPage:React.FC = ()=>{
 
   	// Handler to verify OTP
 	const otpVerifyHandler = async (mobile_number:string, otp: string) => {
+		const token = sessionStorage.getItem('userDataToken')
 		try {
 			const result = await axios.post(
 				`/auth/verify-otp`, // The endpoint
@@ -77,8 +81,8 @@ const LoginPage:React.FC = ()=>{
 			);
 			setOtpSendStatus(3)
 			console.log('OTP verified successfully:', result.data);
-			verifyToken(result.data.loginToken); // Call verifyToken with the registrationToken
-			login()
+			storeToken(result.data.loginToken, "authToken"); // Call verifyToken with the registrationToken
+
 		} catch (error) {
 
 			setOtpSendStatus(4)
@@ -88,8 +92,7 @@ const LoginPage:React.FC = ()=>{
 
     useEffect(() => {
         if (temptoken) {
-			verifyToken(temptoken) 
-		  	// Set the token in the state
+			storeToken(temptoken, "userDataToken") 
           	console.log(token)
 	        // Call your login function if temptoken exists
         }
@@ -102,12 +105,16 @@ const LoginPage:React.FC = ()=>{
     }, [isAuthenticated])
 
     useEffect(()=>{
-		const tokenFromStorage = sessionStorage.getItem('token')
-		if(tokenFromStorage){
-				verifyToken(tokenFromStorage)
+		const authToken = sessionStorage.getItem('authToken')
+		const userDataToken = sessionStorage.getItem('userDataToken')
+		if(authToken){
+			alert('called verified token from session storage')
+			storeToken(authToken, "authToken")
+		}
+		if(userDataToken){
+			storeToken(userDataToken, "userDataToken")
 		}
     },[])
-
 
     return(
 

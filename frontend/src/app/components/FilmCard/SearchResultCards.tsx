@@ -12,15 +12,15 @@ interface SearchCardsProps {
     theater?: string;
     date?: string;
     sortByRating?: boolean;
-    
     // show?: string;
 }
 
 // Define the component with the correct props type
 const SearchResultCards: React.FC<SearchCardsProps> = (props) => {
-    const [results, setResults] = useState<object[]>([]);
 
     const router = useRouter();
+
+    const [results, setResults] = useState<object[]>([]);
 
     const handleOnClick = (item: object, theaterName?:string,  date?: string) => {
 
@@ -30,7 +30,7 @@ const SearchResultCards: React.FC<SearchCardsProps> = (props) => {
     }
 
     // Function to fetch images based on the search parameters
-    const getImages = async () => {
+    const getMovies = async () => {
         try {
             console.log(props, 'hdgefe egfw ei7')
             const response = await getMoviesByFilter(props);
@@ -47,7 +47,7 @@ const SearchResultCards: React.FC<SearchCardsProps> = (props) => {
         const hasParams = Object.keys(props).some(key => (props as any)[key] !== undefined && (props as any)[key] !== null);
 
         if (hasParams) {
-            getImages();
+            getMovies();
         }
         else{
             setResults([])
