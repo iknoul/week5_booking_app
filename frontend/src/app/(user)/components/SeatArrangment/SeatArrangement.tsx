@@ -33,7 +33,7 @@ const SeatArrangement: React.FC<SeatArrangementProps> = ({ rows, columns, seatsT
 		const router = useRouter()
 
 		const [selected, setSelected] = useState<number[]>([])
-		const [notAvailble, setNotAvailable] = useState<number[]>([])
+		const [notAvailable, setNotAvailable] = useState<number[]>([]);
 		const [success, setSuccess] = useState(false)
 		const [fail, setFail] = useState(false)
 
@@ -43,7 +43,7 @@ const SeatArrangement: React.FC<SeatArrangementProps> = ({ rows, columns, seatsT
 	const handleBook = async()=>{
 	
 		try {
-			const result = await payment({
+			await payment({
 				amountToBePaid: amountTobePaid, // amount in smallest currency unit (e.g., paise for INR)
 				seatDetails: selected, // selected seat details
 				showtimeId, // showtime ID from the system,
@@ -56,11 +56,6 @@ const SeatArrangement: React.FC<SeatArrangementProps> = ({ rows, columns, seatsT
 				userName: user?.name,
 				token
 			});
-			// setSuccess(true)
-			// setTimeout(()=>{
-			//   setSuccess(false)
-			//   router.push('/')
-			// }, 5000)
 
 		} catch (error) {
 			setFail(true)
@@ -70,7 +65,7 @@ const SeatArrangement: React.FC<SeatArrangementProps> = ({ rows, columns, seatsT
 
     // Function to handle clicks
 	const handleClick = (seatNumber: number) => {
-			if(!notAvailble.includes(seatNumber)){
+			if(!notAvailable.includes(seatNumber)){
 			setSelected((prevSelected) => {
 				// Check if the item is already selected
 				if (prevSelected.includes(seatNumber)) {
@@ -105,9 +100,12 @@ const SeatArrangement: React.FC<SeatArrangementProps> = ({ rows, columns, seatsT
 			seatRow.push(
 				<div className={`
 					${styles.seat} 
-					${notAvailble.includes(row * columns + col + 1)?styles.notAvailble:''} 
+					${notAvailable.includes(row * columns + col + 1)?styles.notAvailble:''} 
 					${selected.includes(row * columns + col + 1)?styles.selectedSeat:''}`} 
 					onClick={()=>{handleClick(row * columns + col + 1)}}
+					onKeyDown={(e)=>{if(e.key == "Enter"){handleClick(row * columns + col + 1)}}}
+					role='button'
+					tabIndex={0}  // Makes the div focusable
 					key={`${row}-${col}`}
 				>
 				{/* {row * columns + col + 1} Seat numbering */}

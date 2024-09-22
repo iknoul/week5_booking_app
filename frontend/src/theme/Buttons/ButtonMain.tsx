@@ -1,11 +1,10 @@
-import React,{MouseEventHandler} from 'react'
 import styles from './ButtonMain.module.css'
 
 
 interface buttonProps{
     bg?: string;
     disabled?: boolean;
-    callbackFunction?: MouseEventHandler<HTMLDivElement>
+    callbackFunction?: Function
     children?: string
 }
 
@@ -14,7 +13,8 @@ const ButtonMain:React.FC<buttonProps> = ({children, bg, callbackFunction=()=>{}
     return(
     <div 
         className={`${styles.buttonMain} ${bg ? styles[bg]:''} ${disabled ? styles.disabled:''}`}
-        onClick={callbackFunction}
+        onClick={()=>{callbackFunction()}}
+        onKeyDown={(e)=>{if(e.key == 'Enter'){callbackFunction()}}}
     >
         <p>{children}</p>
     </div>)

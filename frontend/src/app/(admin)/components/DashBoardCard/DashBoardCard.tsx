@@ -3,24 +3,29 @@ import editIcon from '@/../public/icons/editIcon.svg'
 import addIcon from '@/../public/icons/addIcon.svg'
 
 import styles from './dashBoardCard.module.css'
-import { MouseEventHandler } from 'react';
+import { KeyboardEvent } from 'react';
 
-interface myProps{
+interface MyProps{
 
     text: string;
-    callBackFunction?: MouseEventHandler<HTMLDivElement>;
+    callBackFunction: Function;
     purpose: string
 }
 
-const DashBoardCard:React.FC<myProps> = ({text, callBackFunction, purpose})=>{
+const DashBoardCard:React.FC<MyProps> = ({text, callBackFunction, purpose})=>{
 
+    const handleKeyDown = (e:KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            callBackFunction()
+        }
+    };
     return(
-    <div className={styles.dashBoardCard} onClick={callBackFunction}>
+    <div className={styles.dashBoardCard} onKeyDown={handleKeyDown} tabIndex={0} onClick={()=>{callBackFunction()}}>
         <Image 
             src={purpose === 'add'?addIcon:editIcon}
             alt={purpose === 'add'?'add icon':'edit icon'}
         />
-        <p>{text?text:''}</p>
+        <p>{text}</p>
     </div>
     )
 }

@@ -15,7 +15,12 @@ const AuthComponent = ()=>{
     return(
     <>
 
-        <div className={styles.googleAuth} onClick={onloginhandler}>
+        <div 
+            className={styles.googleAuth} 
+            onKeyDown={(e)=>{if(e.key == "Enter"){onloginhandler()}}}  
+            onClick={onloginhandler}
+            tabIndex={1}
+        >
             <Image 
                 src={googleIocn}
                 alt='google icon'
@@ -23,7 +28,7 @@ const AuthComponent = ()=>{
             Login via google
         </div>
 
-        <div className={styles.faceBookAuth}>
+        <div className={styles.faceBookAuth} tabIndex={1}>
             <Image 
                 src={facebookIcon}
                 alt='facebook icon'

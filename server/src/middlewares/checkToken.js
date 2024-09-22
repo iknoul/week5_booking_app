@@ -1,4 +1,3 @@
-const { headers } = require('next/headers');
 const jwt = require('./../services/jwt-servise');
 
 exports.blacklistedTokens = new Set();

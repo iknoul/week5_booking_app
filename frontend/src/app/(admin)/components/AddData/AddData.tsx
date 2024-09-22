@@ -15,12 +15,12 @@ interface AddDataProps {
 	callbackFunction?: (theater?: object, item?: string, purpose?: string) => {};
 }
 
-interface searchedTheater{
+interface SearchedTheater{
 	_id?:string;
 	name?:string;
 	location?: string;
 }
-interface searchedMovie{
+interface SearchedMovie{
 	_id?: string;
 	Title?: string;
 	Runtime?: string; // Assuming Runtime is a string, e.g., '120 min'
@@ -38,8 +38,8 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
 
 	const [theaterData, setTheaterData] = useState<{ name: string; location: string; seatPrice: string }>({ name: '', location: '', seatPrice:'' });
 	const [searchName, setSearchName] = useState<string>('')
-	const [searchedMovie, setSearchedMovie] = useState<searchedMovie>({})
-	const [searchedTheater, setSearchedTheater] = useState<searchedTheater>({name:'', location:""});
+	const [searchedMovie, setSearchedMovie] = useState<SearchedMovie>({})
+	const [searchedTheater, setSearchedTheater] = useState<SearchedTheater>({name:'', location:""});
 	const [theater, setTheater] = useState('');
     const [startDate, setStartDate] = useState(''); // For date
     const [endDate, setEndDate] = useState(''); // For date
@@ -114,51 +114,60 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
 		}));
 	};
 
+	const theaterDataValidation = () =>{
+		if(theaterData.name.trim() === '' || theaterData.location.trim() === ''){
+			setError('*all fields are required.');
+			return false
+		}
+		return true
+	}
+
+	const searchedMovieValidation = () => {
+		if(!isEmpty(searchedMovie)){
+			return true
+		}
+		else{
+			setError('*movie required');
+			return false
+		}
+	}
+
+	const showTimeDataValidation = () => {
+		if (theater && searchedMovie && time && startDate && endDate) {
+			// Clear previous error if any
+			setError(null);
+			return true;
+		} else {
+			setError('*all data required');
+			return false;
+		}
+	}
 	// Handle submit action
 	const onSubmit = () => {
 		// Check if required fields are not empty
 		switch(item) {
 
 			case "Theater":
-				if (theaterData.name.trim() === '' || theaterData.location.trim() === '') {
-					setError('*all fields are required.');
-					return; // Prevent further execution
-				}
-				// Clear previous error if any
-				setError(null);
-				// Proceed with submission logic
-				callbackFunction(theaterData, item, purpose);
+				if (theaterDataValidation()) {
+					// Clear previous error if any
+					setError(null);
+					// Proceed with submission logic
+					callbackFunction(theaterData, item, purpose);
+				}		
 				break;
 
 			case "Movie":
-				if (searchName && !isEmpty(searchedMovie)) {
+			case "Movie manually":	
+				if (searchedMovieValidation()) {
 					// Clear previous error if any
 					setError(null);
 					// Proceed with submission logic
 					callbackFunction(searchedMovie, item, purpose)
-				} else {
-					setError('*movie required');
-					return; // Prevent further execution
-				}
-
-				break;
-
-			case "Movie manually":
-				if (!isEmpty(searchedMovie)) {
-					// Clear previous error if any
-					setError(null);
-					// Proceed with submission logic
-					callbackFunction(searchedMovie, item, purpose)
-				} else {
-					setError('*movie required');
-					return; // Prevent further execution
 				}
 				break;
 
 			case "Show time":
-				if (theater && searchedMovie && time && startDate && endDate) {
-					// Clear previous error if any
-					setError(null);
+				if (showTimeDataValidation()) {
 					// Proceed with submission logic
 					callbackFunction({
 						theaterId: searchedTheater._id,
@@ -166,10 +175,7 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
 						startDate, 
 						endDate,
 						time }, item, purpose)
-				} else {
-					setError('*all data required');
-					return; // Prevent further execution
-				}
+				} 
 				break;
 		};
 	}
@@ -180,7 +186,12 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
 	};
 
 	return (    
-		<div className={styles.addData}>
+		
+		<div 
+			className={styles.addData}
+			tabIndex={0} 
+			onKeyDown={(e)=>{if(e.key == 'Escape'){onCancel()}}}
+		>
 			<h3>Add {item}</h3>
 
 			{isLoading &&
@@ -225,7 +236,6 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
 			{(item==='Movie') &&
 			<>
 				<div className={styles.movieSearch}>
-					<label htmlFor="search-movie"></label>
 					<input type="text" id='search-movie' placeholder='search-movie' onChange={onSearchMovieChange} />
 					<ButtonMain bg='red' callbackFunction={()=>{searchNewMovie(true)}}>
 						search
@@ -242,15 +252,13 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
 			}
 
 			{(item==='Movie manually') &&
-			<>
 				<div className={styles.movieForm}>
                     {/* Title Input */}
-                    <label htmlFor="title"></label>
                     <input
                         type="text"
                         id="title"
 						placeholder='Title'
-                        value={searchedMovie.Title || ""}
+                        value={searchedMovie.Title ? searchedMovie.Title : ""}
                         onChange={(e) =>
                             setSearchedMovie({
                                 ...searchedMovie,
@@ -260,12 +268,11 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
                     />
 
                     {/* Runtime Input */}
-                    <label htmlFor="runtime"></label>
                     <input
                         type="text"
                         id="runtime"
 						placeholder='Runtime'
-                        value={searchedMovie.Runtime || ""}
+                        value={searchedMovie.Runtime ? searchedMovie.Runtime : ""}
                         onChange={(e) =>
                             setSearchedMovie({
                                 ...searchedMovie,
@@ -275,12 +282,11 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
                     />
 
                     {/* Genre Input */}
-                    <label htmlFor="genre"></label>
                     <input
                         type="text"
                         id="genre"
 						placeholder='Genre'
-                        value={searchedMovie.Genre?.join(", ") || ""}
+                        value={searchedMovie.Genre ? searchedMovie.Genre?.join(", ") : ""}
                         onChange={(e) =>
                             setSearchedMovie({
                                 ...searchedMovie,
@@ -290,12 +296,11 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
                     />
 
                     {/* Language Input */}
-                    <label htmlFor="language"></label>
                     <input
                         type="text"
                         id="language"
 						placeholder='Language'
-                        value={searchedMovie.Language || ""}
+                        value={searchedMovie.Language ? searchedMovie.Language : ""}
                         onChange={(e) =>
                             setSearchedMovie({
                                 ...searchedMovie,
@@ -305,12 +310,11 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
                     />
 
                     {/* Actors Input */}
-                    <label htmlFor="actors"></label>
                     <input
                         type="text"
                         id="actors"
 						placeholder='Actors name'
-                        value={searchedMovie.Actors || ""}
+                        value={searchedMovie.Actors ? searchedMovie.Actors : ""}
                         onChange={(e) =>
                             setSearchedMovie({
                                 ...searchedMovie,
@@ -320,12 +324,11 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
                     />
 
                     {/* Poster Input */}
-                    <label htmlFor="poster"></label>
                     <input
                         type="text"
                         id="poster"
 						placeholder='Poster URL'
-                        value={searchedMovie.Poster || ""}
+                        value={searchedMovie.Poster ? searchedMovie.Poster : ""}
                         onChange={(e) =>
                             setSearchedMovie({
                                 ...searchedMovie,
@@ -335,11 +338,10 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
                     />
 
                     {/* Plot Input */}
-                    <label htmlFor="plot"></label>
                     <textarea
                         id="plot"
 						placeholder='Plot'
-                        value={searchedMovie.Plot || ""}
+                        value={searchedMovie.Plot ? searchedMovie.Plot : ""}
                         onChange={(e) =>
                             setSearchedMovie({
                                 ...searchedMovie,
@@ -349,12 +351,11 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
                     />
 
                     {/* IMDB Rating Input */}
-                    <label htmlFor="imdbRating"></label>
                     <input
                         type="text"
                         id="imdbRating"
 						placeholder='IMDB Rating'
-                        value={searchedMovie.imdbRating || ""}
+                        value={searchedMovie.imdbRating ? searchedMovie.imdbRating : ""}
                         onChange={(e) =>
                             setSearchedMovie({
                                 ...searchedMovie,
@@ -364,12 +365,11 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
                     />
 
                     {/* Writer Input */}
-                    <label htmlFor="writer"></label>
                     <input
                         type="text"
                         id="writer"
 						placeholder='Writer name'
-                        value={searchedMovie.Writer || ""}
+                        value={searchedMovie.Writer ? searchedMovie.Writer : ""}
                         onChange={(e) =>
                             setSearchedMovie({
                                 ...searchedMovie,
@@ -379,12 +379,11 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
                     />
 
                     {/* Director Input */}
-                    <label htmlFor="director"></label>
                     <input
                         type="text"
                         id="director"
 						placeholder='Director name'
-                        value={searchedMovie.Director || ""}
+                        value={searchedMovie.Director ? searchedMovie.Director : ""}
                         onChange={(e) =>
                             setSearchedMovie({
                                 ...searchedMovie,
@@ -393,13 +392,11 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
                         }
                     />
                 </div>				
-			</>
 			}
 
 			{(item ==='Show time') &&
 			<>
 				<div className={styles.movieSearch}>
-					<label htmlFor="search-movie"></label>
 					<input type="text" id='search-movie' placeholder='search-movie' onChange={onSearchMovieChange} />
 					
 					<ButtonMain bg='red' callbackFunction={()=>{searchNewMovie()}}>

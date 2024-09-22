@@ -22,7 +22,7 @@ interface Theater {
 	seatPrice?: number;
 }
 
-interface showtime {
+interface Showtime {
 	_id ?: string;
 	time ?: string;
 	date ?: string;
@@ -49,11 +49,11 @@ const Booking: React.FC = () => {
 	const [bookingStage, setBookingStage] = useState<string>('theaterSelection'); // State for store booking stage
 	const [selectedTheater, setSelectedTheater] = useState<Theater>({}); // Theater for showtime selection
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null);; // Date for showtime selection
-	const [selectedShowtime, setSelectedShowtime] = useState<showtime>({}); // State for storing Selected showtime data
+	const [selectedShowtime, setSelectedShowtime] = useState<Showtime>({}); // State for storing Selected showtime data
 
 	const [numberOfSeats, setNumberOfSeats] = useState<number>(1); // number of seats for booking
 	const [theaters, setTheaters] = useState<Array<Array<Theater>>>([]); // theaters where the specified movie available
-	const [showtimes, setShowtimes] = useState<showtime[]>([]); // contain fetched showtimes 
+	const [showtimes, setShowtimes] = useState<Showtime[]>([]); // contain fetched showtimes 
 	const [actorsArray, setActorsArray] = useState<string[]>([]); // actors of the specified movie
 
 	const searchParams = useSearchParams(); // get the movie data as params
@@ -98,7 +98,6 @@ const Booking: React.FC = () => {
 
 	// handle the booking stage change
 	const handleNextStage = () => {
-		alert(bookingStage)
 		if (bookingStage === 'theaterSelection' && !selectedTheater) return;
 		if (bookingStage === 'selectDate' && (!selectedDate)) return;
 
@@ -230,7 +229,7 @@ const Booking: React.FC = () => {
 						<select onChange={handleTheaterChange} >
 							<option value="">{selectedTheater.name?selectedTheater.name:"select a theater"}</option>
 							{theaters.map((theater, index) => (
-								<option key={index} value={index}>
+								<option key={theater[0]._id} value={index}>
 									{`${theater[0]?.name}`}
 								</option>
 							))}
@@ -273,7 +272,7 @@ const Booking: React.FC = () => {
 						<select onChange={handleShowtimeChange} value={selectedShowtime.time}>
 							<option value="">Select a showtime</option>
 							{showtimes.map((showtime, index) => (
-							<option key={index} value={index}>
+							<option key={showtime._id} value={index}>
 								{showtime.time}
 							</option>
 							))}
@@ -335,7 +334,7 @@ const Booking: React.FC = () => {
 
 			<div className={styles.cast}>
 				{actorsArray.map((item, index) => (
-				<span key={index}>
+				<span key={item}>
 					<img src="" alt="" />
 					<p>{item}</p>
 				</span>

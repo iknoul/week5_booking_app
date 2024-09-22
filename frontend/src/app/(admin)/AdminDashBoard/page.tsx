@@ -22,7 +22,7 @@ const AdminDashBoard:React.FC = ()=>{
     const {token} = useAuth()
 
 
-    const callbackFunction = async(data?:object, item?:string, puprose?: string)=>{
+    const callbackFunction = async(data?:object, item?:string, puprose?: string) =>{
         setLoading(true)
         if(data){
 
@@ -34,20 +34,14 @@ const AdminDashBoard:React.FC = ()=>{
                         await makeNewTheater(data)
                     }
                     break;
-                case "Movie" || "Movie manually":
-                    alert('now here')
-                    if(puprose == 'add')
-                    {
-                        await makeNewMovie(data)
+
+                case "Movie":
+                case "Movie manually":
+                    if (puprose === 'add') {
+                        await makeNewMovie(data);
                     }
                     break;
-                case 'Movie manually':
-                    alert('now here')
-                    if(puprose == 'add')
-                    {
-                        await makeNewMovie(data)
-                    }
-                    break;
+                        
                 case "Show time":
                     if(puprose == "add")
                     {
@@ -55,6 +49,7 @@ const AdminDashBoard:React.FC = ()=>{
                         await makeNewShowTime(data)
                     }
                     break;
+
                 default:
                     setSelectedItem({ item: '', purpose: '' })
                     break;          

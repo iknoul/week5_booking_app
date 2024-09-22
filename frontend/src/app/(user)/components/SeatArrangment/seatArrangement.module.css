@@ -1,9 +1,7 @@
-/* SeatArrangement.css */
 .seatArrangement {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* background-color: white; */
   }
   
   .row {
@@ -29,7 +27,6 @@
   .screen{
     width: 90%;
     height: 12px;
-    /* border: 1px solid whitesmoke; */
     margin: 40px 0;
     -webkit-box-shadow: 0px -12px 8px 0px rgba(209,202,209,1);
     -moz-box-shadow: 0px -12px 8px 0px rgba(209,202,209,1);

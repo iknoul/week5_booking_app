@@ -4,13 +4,13 @@ import ButtonMain from '@/theme/Buttons/ButtonMain';
 
 import styles from './otpInput.module.css';
 
-interface myProps {
+interface MyProps {
   otpVerifyHandler: (phoneNumber: string, otp: string) => void;
   sendOtpHandler: (phoneNumber: string) => void;
   otpSendStatus: number;
 }
 
-const OtpInput: React.FC<myProps> = ({ otpVerifyHandler, sendOtpHandler, otpSendStatus}) => {
+const OtpInput: React.FC<MyProps> = ({ otpVerifyHandler, sendOtpHandler, otpSendStatus}) => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [otp, setOtp] = useState('');
 
@@ -43,6 +43,7 @@ const OtpInput: React.FC<myProps> = ({ otpVerifyHandler, sendOtpHandler, otpSend
 			onChange={handlePhoneNumberChange}
 			placeholder="Enter Phone Number"
 			className={styles.inputField}
+			onKeyDown={(e)=>{if(e.key == "Enter"){handleSendOtp()}}}
 		/>
 
 		{/* Button to send OTP */}
@@ -68,6 +69,7 @@ const OtpInput: React.FC<myProps> = ({ otpVerifyHandler, sendOtpHandler, otpSend
 			placeholder="Enter OTP"
 			className={styles.inputField}
 			disabled={!phoneNumber}
+			onKeyDown={(e)=>{if(e.key == "Enter"){handleVerifyOtp()}}}
 		/>
 
 		{/* Button to verify OTP */}

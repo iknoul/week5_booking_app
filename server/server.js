@@ -42,8 +42,8 @@ const theaterRoute = require('./src/modules/Theater/routes')
 // Use routes
 app.use('/auth', authRoutes);
 app.use('/movie', movieRoute)
-app.use('/admin', checkToken.checkToken(undefined, undefined, role='admin'), adminRoute)
-app.use('/user', checkToken.checkToken(undefined, undefined, undefined, needMobile=true), userRoute)
+app.use('/admin', checkToken.checkToken(undefined, undefined, 'admin'), adminRoute)
+app.use('/user', checkToken.checkToken(undefined, undefined, undefined, true), userRoute)
 app.use('/theater', theaterRoute)
 
 

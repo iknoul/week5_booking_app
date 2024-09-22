@@ -21,7 +21,7 @@ router.post('/callback', passport.authenticate('google', { session: false }), Au
 
 
 router.post('/send-otp', 
-    checkTokenMiddleWare.checkToken(['otpVerified'], not=true),
+    checkTokenMiddleWare.checkToken(['otpVerified'], true),
     validateMiddleWare.validateMobile_no, 
     AuthController.sentOtp
 )

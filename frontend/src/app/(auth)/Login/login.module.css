@@ -6,7 +6,6 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
-    /* background-color: white; */
     background: rgb(208,43,29);
     background: linear-gradient(90deg, rgba(208,43,29,0.9698004201680672) 0%, rgba(40,54,150,0.9445903361344538) 100%);
 
@@ -22,10 +21,8 @@
     align-items: center;
     padding: 20px;
     background-color: white;
-    /* border: 1px solid black; */
     gap: 20px;
     max-width: 400px;
-    min-height: 280px;
 }
 .googleAuth, .faceBookAuth{
     cursor: pointer;

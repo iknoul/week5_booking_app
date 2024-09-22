@@ -11,8 +11,8 @@ interface RazorpayResponse {
 interface Window {
     Razorpay: any; // You can replace 'any' with a more specific type if you have one
 }
-interface payment {
-    amountToBePaid: Number;
+interface Payment {
+    amountToBePaid: number;
     seatDetails: number[];
     showtimeId: string;
     setSuccess: Function;
@@ -25,7 +25,7 @@ interface payment {
     token?: string;
 }
 
-const handlePayment = async ({amountToBePaid, seatDetails, showtimeId, setSuccess, setFail, showTimeData, theaterName, theaterLocation, movieName, userName, token}:payment) => {
+const handlePayment = async ({amountToBePaid, seatDetails, showtimeId, setSuccess, setFail, showTimeData, theaterName, theaterLocation, movieName, userName, token}:Payment) => {
 
   // console.log('here inside payment but')
 
