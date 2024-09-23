@@ -56,10 +56,10 @@ const SearchResultCards: React.FC<SearchCardsProps> = (props) => {
 
     return (
         <div className={styles.cardContainer}>    
-            { 
-            results.map((item, index)=>{
-                return(<FilmCard key={index} item={item} callBackFunction={()=>{handleOnClick(item, props.theater, props.date)}}/>)
-            })
+            { results.length>0 &&
+                results.map((item, index)=>{
+                    return(<FilmCard key={index} item={item} callBackFunction={()=>{handleOnClick(item, props.theater, props.date)}}/>)
+                })
             }          
         </div>
     );
