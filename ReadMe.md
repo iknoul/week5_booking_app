@@ -59,7 +59,7 @@ This application is a movie ticket booking platform built using the MERN (MongoD
 
 ### 7. Making a Payment
 
-1. Logged-in user is redirected to the payment page (using any payment gateway).
+1. Logged-in user is redirected to the payment page (using Razorpay payment gateway).
 2. User enters payment details (credit card, debit card, or digital wallet).
 3. The website securely processes the payment.
 4. Upon successful payment, the user receives a payment confirmation message.
