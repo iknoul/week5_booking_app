@@ -1,0 +1,1 @@
+This `README.md` file gives a clear structure of the app’s user flow and setup instructions, making it easier for other developers to understand the project.
