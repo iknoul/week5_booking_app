@@ -58,6 +58,7 @@ exports.getMovie = (req, res) => {
         const showtimeMatch = {};
         if (showDate) {
             showtimeMatch['showtimes.date'] = showDate; // Match specific show date
+            console.log('here the showDate', showDate)
         }
         if (showTime) {
             showtimeMatch['showtimes.time'] = showTime; // Match specific show time

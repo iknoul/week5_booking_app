@@ -1,6 +1,6 @@
 'use client'
 
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useMemo, useState } from 'react';
 import { AuthContext } from './AuthContext';
 import axios from './../../utils/axios'
 
@@ -53,9 +53,22 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 	};
 
 	return (
-		<AuthContext.Provider
-			value={{ isAuthenticated, oAuthStatus, role, user, token, login, logout, setOAuthStatus, setRole, setUserData, setToken }}
-		>
+		// Assuming the context setup is similar to this:
+<AuthContext.Provider
+	value={useMemo(() => ({
+		isAuthenticated,
+		oAuthStatus,
+		role,
+		user,
+		token,
+		login,
+		logout,
+		setOAuthStatus,
+		setRole,
+		setUserData,
+		setToken
+	}), [isAuthenticated, oAuthStatus, role, user, token, login, logout, setOAuthStatus, setRole, setUserData, setToken])}
+>
 			{children}
 		</AuthContext.Provider>
 	);

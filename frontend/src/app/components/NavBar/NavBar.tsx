@@ -42,9 +42,9 @@ const NavBar = ()=>{
             {!isAuthenticated ? 
             <ButtonMain bg='white' callbackFunction={()=>{router.push('/Login')}}>Sign in</ButtonMain>
             :
-            <>
-                <ButtonMain bg='white' callbackFunction={()=>{logout()}}>Log out</ButtonMain>
-            </>
+            
+            <ButtonMain bg='white' callbackFunction={()=>{logout()}}>Log out</ButtonMain>
+            
             }
         </span>
 

@@ -153,7 +153,7 @@ const AdminDashBoard:React.FC = ()=>{
     }
 
     return(
-        <PrivateRoute roleP='admin'>
+        <PrivateRoute requiredRole='admin'>
             <div className={styles.adminDashBoard}>
                 {success &&
                     <Alert message="Done" type="success" showIcon className={styles.alert}/>
@@ -161,17 +161,17 @@ const AdminDashBoard:React.FC = ()=>{
                 {fail&&
                     <Alert message="Error" type="error" showIcon className={styles.alert}/>
                 }
-                {loading&&
-                    <Spin className={styles.Spin}/>
-                }
                   
                 {selectedItem.item && (
-                    <AddData 
-                    item={selectedItem.item}
-                    purpose={selectedItem.purpose}
-                    callbackFunction={callbackFunction}
-                    // visible = {true}
-                    />
+                    <Spin spinning={loading}>
+                        <AddData 
+                            item={selectedItem.item}
+                            purpose={selectedItem.purpose}
+                            callbackFunction={callbackFunction}
+                            // visible = {true}
+                        />
+                    </Spin>
+                    
                 )}
                 <DashBoardCardContainer selectedItem={selectedItem} setSelectedItem={setSelectedItem}/>
             </div>

@@ -19,7 +19,6 @@ const SearchBar: React.FC<SetSearchParams> = ({ setUserInput }) => {
     const [movieName, setMovieName] = useState('');
     const [theaterName, setTheaterName] = useState('');
     const [date, setDate] = useState('');
-    const [show, setShow] = useState('');
     const [time, setTime] = useState(''); // New time state
     const [filterByRate, setFilterByRate] = useState(false);
 
@@ -48,6 +47,7 @@ const SearchBar: React.FC<SetSearchParams> = ({ setUserInput }) => {
         setTheaterName(e.target.value);
     };
     const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(date, 'herer the datae')
         setDate(e.target.value);
     };
     const handleTimeChange = (time: string) => {
@@ -59,10 +59,9 @@ const SearchBar: React.FC<SetSearchParams> = ({ setUserInput }) => {
         const isMovieNameValid = movieName && movieName.trim() !== '';
         const isTheaterNameValid = theaterName && theaterName.trim() !== '';
         const isDateValid = date && date.trim() !== '';
-        const isShowValid = show && show.trim() !== '';
         const isTimeValid = time && time.trim() !== ''; // New time validation
 
-        if (isMovieNameValid || isTheaterNameValid || isDateValid || isShowValid || isTimeValid) {
+        if (isMovieNameValid || isTheaterNameValid || isDateValid || isTimeValid) {
             // Create userInput object only with valid inputs
             const userInput: Record<string, any> = {};
             if (isMovieNameValid) userInput.title = movieName;
@@ -72,6 +71,7 @@ const SearchBar: React.FC<SetSearchParams> = ({ setUserInput }) => {
             userInput.sortByRating = filterByRate;
 
             setUserInput(userInput);
+            console.log(userInput, 'user imput here')
         } else {
         // Handle case where all inputs are invalid (e.g., clear userInput)
             setUserInput({});

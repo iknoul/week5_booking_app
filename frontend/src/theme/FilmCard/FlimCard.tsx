@@ -9,6 +9,15 @@ import ButtonMain from "../../theme/Buttons/ButtonMain";
 import styles from './FilmCard.module.css';
 
 
+interface Showtime {
+	_id ?: string;
+	time ?: string;
+	date ?: string;
+	bookedSeats ?: string[];
+	movieId ?:string;
+	theaterId?: string;
+}
+
 interface FilmCardProps {
     item: {
         Title?: string;
@@ -19,6 +28,7 @@ interface FilmCardProps {
         Poster?: string; // URL or path to the poster image
         Plot?: string;
         imdbRating?:  string;
+        showtimes?: Showtime[]
     };
     callBackFunction?: MouseEventHandler<HTMLDivElement>;
     isButtonVisible?:boolean;

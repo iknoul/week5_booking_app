@@ -27,7 +27,10 @@ interface Showtime {
 	time ?: string;
 	date ?: string;
 	bookedSeats ?: string[];
+	movieId ?:string;
+	theaterId?: string;
 }
+
 
 interface Movie {
 	_id: string;
@@ -42,6 +45,7 @@ interface Movie {
 	Director?: string;
 	Writer?: string;
 	Theater?: Array<string>;
+	showtimes?: Array<Showtime>;
 }
 
 const Booking: React.FC = () => {
@@ -75,6 +79,7 @@ const Booking: React.FC = () => {
 		console.log(showtimes)
 		const selectedIndex = Number(e.target.value); // Convert value to number
 		if (selectedIndex >= 0 && selectedIndex < theaters.length) {
+			alert('here came')
 			setSelectedShowtime(showtimes[selectedIndex]);
 		} else {
 			setSelectedShowtime({});
@@ -142,39 +147,48 @@ const Booking: React.FC = () => {
 	useEffect(() => {
 
 		const theaterData = searchParams.get('theater')
-		const date = searchParams.get('date')
+		const date = searchParams.get('date');
 
 		const fetchTheaters = async () => {
-		if (movie?.Theater) {
-			try {
-				const results = await Promise.all(
-					movie.Theater.map(async (theaterId, index) => {
-						const response = await getTheaterById({ theaterId });
-						if(theaterData && theaterData === response.data[index]?.name){
+			if (movie?.Theater) {
+				try {
+					const results = await Promise.all(
+						movie.Theater.map(async (theaterId, index) => {
+							const response = await getTheaterById({ theaterId });
+							if(theaterData && theaterData === response.data[index]?.name){
+								alert('came inside the @')
+								setSelectedTheater(response.data[index])
+							}
 							
-							setSelectedTheater(response.data[index])
+							return response.data;
+						})
+					);
+					setTheaters(results);
+				} catch (error) {
+					console.error('Error fetching theater data:', error);
+				}
+
+				if (date) {
+					try {
+						const parsedDate = new Date(date);
+						console.log(parsedDate, "Parsed Date");  // Log the parsed date
+				
+						// Ensure the date is valid
+						if (!isNaN(parsedDate.getTime())) {
+							setSelectedDate(parsedDate);
+							alert('date setted corerectly')
+						} else {
+							console.error('Invalid date format:', date);
 						}
-						
-						return response.data;
-					})
-				);
-				setTheaters(results);
-			} catch (error) {
-				console.error('Error fetching theater data:', error);
+					} catch (error) {
+						console.log(error)
+					}
+				}
 			}
-
-			if (typeof date === 'string') {
-
-				const parsedDate = new Date(date);	
-				// Check if the parsed date is valid
-				if (!isNaN(parsedDate.getTime())) {
-				 	setSelectedDate(parsedDate);
-				} 
-			}
-		}
 		};
 		fetchTheaters();
 	}, [movie]);
+	
 
 	// Fetch showtimes after selecting a theater and date
 	useEffect(() => {
@@ -227,7 +241,9 @@ const Booking: React.FC = () => {
 				{bookingStage === 'theaterSelection' && (
 				<>
 						<select onChange={handleTheaterChange} >
-							<option value="">{selectedTheater.name?selectedTheater.name:"select a theater"}</option>
+							{!selectedTheater.name&&
+								<option value="">select a theater</option>
+							}
 							{theaters.map((theater, index) => (
 								<option key={theater[0]._id} value={index}>
 									{`${theater[0]?.name}`}

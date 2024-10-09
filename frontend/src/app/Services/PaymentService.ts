@@ -35,7 +35,7 @@ const handlePayment = async ({amountToBePaid, seatDetails, showtimeId, setSucces
     try {
       // Request the server to create an order
 		const { data } = await axios.post('user/create-order', 
-			{ amount: amountToBePaid },
+			{ amount: amountToBePaid,  showtimeId, seatDetails},
 			{
 			headers: {
 				Authorization: `Bearer ${token}`, // Token from props

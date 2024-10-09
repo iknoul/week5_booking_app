@@ -71,7 +71,6 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
 			} else {
 				const response = await axios.post(`/movie/getMovie`,{title:searchName})
 				result = response.data.data[0]
-				console.log(response, result, "here olddd")
 			}
 			// console.log(result?.Response, 'sf')
 			
@@ -80,10 +79,9 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
 				console.log(result)
 			} else {
 				setSearchedMovie({})
-				console.log('no such film kn')
 			}
 		} catch (error) {
-			console.log('error baby')
+			console.log('error ')
 		}
 
 		setIsLoading(false)
@@ -186,17 +184,13 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
 	};
 
 	return (    
-		
+	<Spin spinning={isLoading}>
 		<div 
 			className={styles.addData}
 			tabIndex={0} 
 			onKeyDown={(e)=>{if(e.key == 'Escape'){onCancel()}}}
 		>
 			<h3>Add {item}</h3>
-
-			{isLoading &&
-				<Spin />
-			}
 
 			{/*JSX for inputs if item is theater */}
 			{item === 'Theater' && 
@@ -473,6 +467,7 @@ const AddData: React.FC<AddDataProps> = ({ item, purpose, callbackFunction=()=>{
 				</ButtonMain>
 			</div>
 		</div>
+	</Spin>
 	);
 };
 

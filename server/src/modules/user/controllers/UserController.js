@@ -49,16 +49,16 @@ exports.verifyOrderController = async (req, res) => {
         const { seatDetails, showTimeData, theaterName, theaterLocation, movieName, mobile_number} = req.body;
 
         
-        let msg = (`Thanks for Booking with Us. 
+        let msg = (`🎉Thanks for Booking with Us. 
         \n${movieName}\nThaeater: ${theaterName}\nLocation: ${theaterLocation}\nDate: ${showTimeData.date}\nTime: ${showTimeData.time}
         \nyour seats are:`)
         // Create new seat and add reference to showtime
-        for(let i=0; i<seatDetails.length;i++){
-            console.log(seatDetails[i] / 10)
-            msg = msg + ` ${uppercaseLetters[Math.floor(seatDetails[i] / 10)]}${seatDetails[i] % 10}`
+        for(const seat of seatDetails){
+            console.log(seat / 10)
+            msg = msg + ` ${uppercaseLetters[Math.floor(seat / 10)]}${seat % 10}`
             console.log(seatDetails)
-            console.log({number:seatDetails[i]})
-            const newSeat = await userRepository.createSeat({number:seatDetails[i]});
+            console.log({number:seat})
+            const newSeat = await userRepository.createSeat({number:seat});
             console.log(showTimeData, showTimeData._id)
             await userRepository.addSeatToShowtime(showTimeData._id, newSeat._id);
         }

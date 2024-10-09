@@ -8,7 +8,7 @@ import SearchResultCards from "./components/FilmCard/SearchResultCards";
 
 import styles from './page.module.css'
 
-interface userinput{
+interface Userinput{
   title?: string;
   theaterName?: string;
   sortByRating?:boolean;
@@ -16,10 +16,10 @@ interface userinput{
 }
 const Home = () =>{
 
-  const [userInput, setUserInput] = useState<userinput>({});
+  const [userInput, setUserInput] = useState<Userinput>({});
+  
   
   return(
-  <>
     <main className={styles.main}>
 
         <SearchBar setUserInput={setUserInput}/>
@@ -27,8 +27,7 @@ const Home = () =>{
         <CorousalFilm />
         <FilmCards />  
 
-    </main>
-  </>)
+    </main>)
 }
 
 export default Home

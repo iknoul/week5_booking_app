@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useState, useContext, ReactNode } from 'react';
+import { createContext,} from 'react';
 interface Profile{
   value:string;
 }
@@ -22,7 +22,7 @@ interface AuthContextType
   logout: Function;
   setOAuthStatus: Function;
   setRole: Function;
-  user?: User | undefined;
+  user: User | undefined;
   setUserData: Function;
   token?: string;
   setToken: Function;

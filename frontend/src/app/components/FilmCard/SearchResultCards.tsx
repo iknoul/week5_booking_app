@@ -24,6 +24,11 @@ const SearchResultCards: React.FC<SearchCardsProps> = (props) => {
 
     const handleOnClick = (item: object, theaterName?:string,  date?: string) => {
 
+
+        console.log(props, "here the date")
+        // alert((typeof date))
+        // alert(date)
+
          // Use encodeURIComponent for the stringified movie object
          const movieData = encodeURIComponent(JSON.stringify(item));
          router.push(`/Booking?movie=${movieData}&theater=${theaterName}&date=${date}`);

@@ -3,17 +3,17 @@ import { useRouter } from 'next/navigation';
 import { ReactNode, useEffect } from 'react';
 
 type PrivateRouterProps = {
-	roleP?: string;
+	requiredRole?: string;
 	children: ReactNode
 };
 
-const PrivateRoute: React.FC<PrivateRouterProps> = ({roleP, children }) => {
+const PrivateRoute: React.FC<PrivateRouterProps> = ({requiredRole, children }) => {
 	const { isAuthenticated, role} = useAuth();
 	const router = useRouter();
 
 	useEffect(() => {
 		console.log(role, 'in private rpute')
-		if ((!isAuthenticated) || (roleP && roleP !=role)) 
+		if ((!isAuthenticated) || (requiredRole && requiredRole !=role)) 
 		{
 			router.push('/Login'); // Redirect to login if not authenticated
 		}
